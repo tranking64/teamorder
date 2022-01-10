@@ -1,4 +1,6 @@
-ion-tabs{
-  --ion-tabbar-background-color: var(--ion-color-primary);
-  --ion-tabs-background-color: var(--ion-tabbar-background-color, #ffffff);
-  }
+ion-tab-bar {
+  --border: none;
+  --background: var(--ion-color-primary);
+  --color-selected: white;
+  --color: #d1d1d1;
+}
