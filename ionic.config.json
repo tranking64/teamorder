@@ -1,0 +1,7 @@
+{
+  "name": "teamorder",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
