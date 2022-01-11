@@ -1,0 +1,36 @@
+<ion-content>
+  <div id="card">
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-icon color="primary" name="person-circle-sharp"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="E-Mail" type="email" [(ngModel)]="email"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Passwort" type="password" [(ngModel)]="password"></ion-input>
+            <span>
+              <a class="ion-float-left" routerLink="/forgot-pw">Passwort vergessen?</a>
+            </span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="login()">Anmelden</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <span>Noch kein Account? <b><a routerLink="/signup">Registrieren</a></b></span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

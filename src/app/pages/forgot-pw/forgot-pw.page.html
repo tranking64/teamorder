@@ -1,0 +1,25 @@
+<ion-content>
+  <div id="card">
+    <ion-icon routerLink="/login" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1><b>Passwort vergessen?</b></h1>
+            <span>Gib deine E-Mail ein und erhalte einen Code, mit welchen du ein neues Passwort erstellen kannst.</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="E-Mail" type="email" [(ngModel)]="email"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="sendLink()">Senden</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>
