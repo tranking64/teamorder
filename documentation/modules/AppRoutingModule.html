@@ -78,11 +78,28 @@ import { PreloadAllModules, RouterModule, Routes } from &#x27;@angular/router&#x
 const routes: Routes &#x3D; [
   {
     path: &#x27;&#x27;,
+    redirectTo: &#x27;login&#x27;,
+    pathMatch: &#x27;full&#x27;
+  },
+  {
+    path: &#x27;tabs&#x27;,
     loadChildren: () &#x3D;&gt; &quot;import(&#x27;./tabs/tabs.module&#x27;).then(m &#x3D;&gt; m.TabsPageModule)&quot;
   },
   {
-    path: &#x27;tab4&#x27;,
-    loadChildren: () &#x3D;&gt; &quot;import(&#x27;./tab4/tab4.module&#x27;).then( m &#x3D;&gt; m.Tab4PageModule)&quot;
+    path: &#x27;login&#x27;,
+    loadChildren: () &#x3D;&gt; &quot;import(&#x27;./pages/login/login.module&#x27;).then(m &#x3D;&gt; m.LoginPageModule)&quot;
+  },
+  {
+    path: &#x27;forgot-pw&#x27;,
+    loadChildren: () &#x3D;&gt; &quot;import(&#x27;./pages/forgot-pw/forgot-pw.module&#x27;).then( m &#x3D;&gt; m.ForgotPwPageModule)&quot;
+  },
+  {
+    path: &#x27;new-pw&#x27;,
+    loadChildren: () &#x3D;&gt; &quot;import(&#x27;./pages/new-pw/new-pw.module&#x27;).then( m &#x3D;&gt; m.NewPwPageModule)&quot;
+  },
+  {
+    path: &#x27;signup&#x27;,
+    loadChildren: () &#x3D;&gt; &quot;import(&#x27;./pages/signup/signup.module&#x27;).then( m &#x3D;&gt; m.SignupPageModule)&quot;
   }
 ];
 @NgModule({

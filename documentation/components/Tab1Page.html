@@ -176,7 +176,11 @@ export class Tab1Page {
     &lt;/ion-toolbar&gt;
   &lt;/ion-header&gt;
 
-  &lt;app-explore-container name&#x3D;&quot;Tab 1 page&quot;&gt;&lt;/app-explore-container&gt;
+  &lt;ion-fab vertical&#x3D;&quot;bottom&quot; horizontal&#x3D;&quot;end&quot; slot&#x3D;&quot;fixed&quot;&gt;
+    &lt;ion-fab-button&gt;
+      &lt;ion-icon name&#x3D;&quot;add&quot;&gt;&lt;/ion-icon&gt;
+    &lt;/ion-fab-button&gt;
+  &lt;/ion-fab&gt;
 &lt;/ion-content&gt;
 </code></pre>
     </div>
@@ -213,8 +217,8 @@ export class Tab1Page {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><ion-header [translucent]="true">  <ion-toolbar>    <ion-title>      Tab 1    </ion-title>  </ion-toolbar></ion-header><ion-content [fullscreen]="true">  <ion-header collapse="condense">    <ion-toolbar>      <ion-title size="large">Tab 1</ion-title>    </ion-toolbar>  </ion-header>  <app-explore-container name="Tab 1 page"></app-explore-container></ion-content></div>'
-    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ExploreContainerComponent', 'selector': 'app-explore-container'},{'name': 'Tab1Page', 'selector': 'app-tab1'},{'name': 'Tab2Page', 'selector': 'app-tab2'},{'name': 'Tab3Page', 'selector': 'app-tab3'},{'name': 'Tab4Page', 'selector': 'app-tab4'},{'name': 'TabsPage', 'selector': 'app-tabs'}];
+        var COMPONENT_TEMPLATE = '<div><ion-header [translucent]="true">  <ion-toolbar>    <ion-title>      Tab 1    </ion-title>  </ion-toolbar></ion-header><ion-content [fullscreen]="true">  <ion-header collapse="condense">    <ion-toolbar>      <ion-title size="large">Tab 1</ion-title>    </ion-toolbar>  </ion-header>  <ion-fab vertical="bottom" horizontal="end" slot="fixed">    <ion-fab-button>      <ion-icon name="add"></ion-icon>    </ion-fab-button>  </ion-fab></ion-content></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ExploreContainerComponent', 'selector': 'app-explore-container'},{'name': 'ForgotPwPage', 'selector': 'app-forgot-pw'},{'name': 'LoginPage', 'selector': 'app-login'},{'name': 'NewPwPage', 'selector': 'app-new-pw'},{'name': 'SignupPage', 'selector': 'app-signup'},{'name': 'Tab1Page', 'selector': 'app-tab1'},{'name': 'Tab2Page', 'selector': 'app-tab2'},{'name': 'Tab3Page', 'selector': 'app-tab3'},{'name': 'Tab4Page', 'selector': 'app-tab4'},{'name': 'TabsPage', 'selector': 'app-tabs'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'Tab1Page'};
 </script>
