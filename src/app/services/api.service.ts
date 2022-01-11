@@ -33,6 +33,24 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  signup(sFirstName, sLastName, sBirthDate, sEmail, sPassword, sCountry, sGender): Observable<any> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.http.post('https://diplom2021.itkaufmann.cloud/api/auth/register',
+      {
+        firstname: sFirstName,
+        lastname: sLastName,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        date_of_birth: sBirthDate,
+        email: sEmail,
+        password: sPassword,
+        country: sCountry,
+        gender: sGender
+      },
+      {headers})
+        .pipe(catchError(this.handleError));
+  }
+
   handleError(error) {
     return throwError(error.error.error);
   }
