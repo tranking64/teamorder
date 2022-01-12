@@ -26,7 +26,23 @@ const routes: Routes = [
   {
     path: 'signup',
     loadChildren: () => import('./pages/signup/signup.module').then( m => m.SignupPageModule)
+  },
+  {
+    path: 'personal-data',
+    loadChildren: () => import('./pages/personal-data/personal-data.module').then( m => m.PersonalDataPageModule)
+  },  {
+    path: 'delete-acc',
+    loadChildren: () => import('./pages/delete-acc/delete-acc.module').then( m => m.DeleteAccPageModule)
+  },
+  {
+    path: 'change-pw',
+    loadChildren: () => import('./pages/change-pw/change-pw.module').then( m => m.ChangePwPageModule)
+  },
+  {
+    path: 'update-user',
+    loadChildren: () => import('./pages/update-user/update-user.module').then( m => m.UpdateUserPageModule)
   }
+
 ];
 @NgModule({
   imports: [

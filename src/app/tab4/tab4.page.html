@@ -1,7 +1,7 @@
 <ion-content forceOverscroll="false">
   <ion-grid>
     <h1>Konto</h1>
-    <ion-row class="box">
+    <ion-row class="box" routerLink="/update-user">
       <ion-col>
         <span>Daten ändern</span>
       </ion-col>
@@ -9,7 +9,7 @@
         <ion-icon name="chevron-forward-sharp"></ion-icon>
       </ion-col>
     </ion-row>
-    <ion-row class="box">
+    <ion-row class="box" routerLink="/change-pw">
       <ion-col>
         <span>Passwort ändern</span>
       </ion-col>
@@ -17,7 +17,7 @@
         <ion-icon name="chevron-forward-sharp"></ion-icon>
       </ion-col>
     </ion-row>
-    <ion-row class="box">
+    <ion-row class="box" routerLink="/delete-acc">
       <ion-col>
         <span>Konto löschen</span>
       </ion-col>
@@ -25,7 +25,7 @@
         <ion-icon name="chevron-forward-sharp"></ion-icon>
       </ion-col>
     </ion-row>
-    <ion-row class="box">
+    <ion-row class="box" routerLink="/personal-data">
       <ion-col>
         <span>Kontodaten anfordern</span>
       </ion-col>
@@ -36,7 +36,7 @@
     <h1>Allgemein</h1>
     <ion-row class="switch-box">
       <ion-col>
-        <span>Benachrichtigung</span>
+        <span>Benachrichtigungen</span>
       </ion-col>
       <ion-col id="switch" class="ion-text-right">
         <ion-toggle color="primary"></ion-toggle>

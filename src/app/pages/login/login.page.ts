@@ -17,6 +17,13 @@ export class LoginPage implements OnInit {
 
   constructor(private service: ApiService, private router: Router, private loadingCtrl: LoadingController) {}
 
+  // called e.g. when from logout --> login
+  // removing old inpunts
+  ionViewWillEnter() {
+    this.email = '';
+    this.password = '';
+  }
+
   ngOnInit() {
     this.rememberLogin();
   }

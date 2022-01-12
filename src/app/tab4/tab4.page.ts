@@ -29,7 +29,11 @@ export class Tab4Page {
 
     this.service.logout(email, accessToken.value)
       .subscribe(
-        (data) => {
+        async (data) => {
+          // delete tokens
+          await Storage.remove({ key: 'access_token' });
+          await Storage.remove({ key: 'refresh_token' });
+
           this.router.navigate(['/login']);
         },
         (error) => {

@@ -78,6 +78,41 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  changePassword(oldPassword: string, newPassword: string, accessToken: string): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', accessToken);
+
+    return this.http.put('https://diplom2021.itkaufmann.cloud/api/user/password',
+      {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        old_password: oldPassword,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        new_password: newPassword
+      },
+      {headers})
+        .pipe(catchError(this.handleError));
+  }
+
+  updateUser(uFirstName, uLastName, uEmail, uBirthDate, uCountry, uGender, accessToken): Observable<any> {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    .set('Authorization', accessToken);
+
+    return this.http.put('https://diplom2021.itkaufmann.cloud/api/user/update',
+      {
+        firstname: uFirstName,
+        lastname: uLastName,
+        email: uEmail,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        date_of_birth: uBirthDate,
+        country: uCountry,
+        gender: uGender
+      },
+      {headers})
+        .pipe(catchError(this.handleError));
+  }
+
   handleError(error) {
     return throwError(error);
   }

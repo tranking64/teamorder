@@ -1,0 +1,40 @@
+ion-content {
+  font-size: 12px;
+  --background: var(--ion-color-primary);
+}
+
+#card {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 85%;
+  background-color: #f4f5f8;
+  border-top-left-radius: 60px;
+  border-top-right-radius: 60px;
+}
+
+#container {
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ion-float-left {
+  margin-top: 5px;
+  margin-left: 2px;
+}
+
+ion-icon {
+  margin-left: 20px;
+  margin-top: 25px;
+  font-size: 30px;
+}
+
+ion-grid {
+  width: 85%;
+}

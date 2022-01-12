@@ -1,0 +1,34 @@
+<ion-content>
+  <div id="card">
+    <ion-icon routerLink="/tabs/tab4" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1><b>Passwort ändern</b></h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Altes Passwort" type="password" [(ngModel)]="oldPassword"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Neues Passwort" type="password" [(ngModel)]="newPassword"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Neues Passwort bestätigen" type="password" [(ngModel)]="cNewPassword"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="change()">Änderung vornehmen</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>
