@@ -51,7 +51,34 @@ export class ApiService {
         .pipe(catchError(this.handleError));
   }
 
+  getCurrUserData(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', accessToken);
+
+    return this.http.get('https://diplom2021.itkaufmann.cloud/api/user/get', {headers})
+      .pipe(catchError(this.handleError));
+  }
+
+  logout(lEmail: string, accessToken: string): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', accessToken);
+
+    return this.http.post('https://diplom2021.itkaufmann.cloud/api/auth/logout', {email: lEmail}, {headers})
+      .pipe(catchError(this.handleError));
+  }
+
+  // Observable<any> needed to get object back from any type --> JSON example: data.data.error.....
+  rememberLogin(refreshToken: string): Observable<any> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    return this.http.post('https://diplom2021.itkaufmann.cloud/api/auth/refresh', {refresh_token: refreshToken} ,{headers})
+      .pipe(catchError(this.handleError));
+  }
+
   handleError(error) {
-    return throwError(error.error.error);
+    return throwError(error);
   }
 }

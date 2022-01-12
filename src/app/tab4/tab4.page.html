@@ -1,17 +1,65 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 4
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 4</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 4 page"></app-explore-container>
+<ion-content forceOverscroll="false">
+  <ion-grid>
+    <h1>Konto</h1>
+    <ion-row class="box">
+      <ion-col>
+        <span>Daten ändern</span>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <ion-icon name="chevron-forward-sharp"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row class="box">
+      <ion-col>
+        <span>Passwort ändern</span>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <ion-icon name="chevron-forward-sharp"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row class="box">
+      <ion-col>
+        <span>Konto löschen</span>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <ion-icon name="chevron-forward-sharp"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row class="box">
+      <ion-col>
+        <span>Kontodaten anfordern</span>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <ion-icon name="chevron-forward-sharp"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <h1>Allgemein</h1>
+    <ion-row class="switch-box">
+      <ion-col>
+        <span>Benachrichtigung</span>
+      </ion-col>
+      <ion-col id="switch" class="ion-text-right">
+        <ion-toggle color="primary"></ion-toggle>
+      </ion-col>
+    </ion-row>
+    <ion-row class="box">
+      <ion-col>
+        <span>Sprache</span>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <ion-icon name="chevron-down-sharp"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row class="box">
+      <ion-col>
+        <span>Theme</span>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <ion-icon name="chevron-down-sharp"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row id="button">
+      <ion-button (click)="logout()">Abmelden</ion-button>
+    </ion-row>
+  </ion-grid>
 </ion-content>
