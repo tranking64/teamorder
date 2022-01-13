@@ -1,0 +1,27 @@
+<ion-content>
+  <div id="card">
+    <ion-icon routerLink="/tabs/tab4" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1><b>Konto löschen</b></h1>
+            <ion-text color="medium">
+              <span>Wenn du sicher bist, dass du dein Konto löschen möchtest, gebe dein Passwort ein!</span>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Passwort" type="password" [(ngModel)]="password"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button color="danger" (click)="delete()">Senden</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

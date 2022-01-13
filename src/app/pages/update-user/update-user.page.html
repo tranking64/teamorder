@@ -1,0 +1,64 @@
+<ion-content>
+  <div id="card">
+    <ion-icon routerLink="/tabs/tab4" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1><b>Kontodaten ändern</b></h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Vorname" type="text" [(ngModel)]="firstName"></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input placeholder="Nachname" type="text" [(ngModel)]="lastName"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="E-Mail" type="email" [(ngModel)]="email"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-start input-box">
+              <ion-select placeholder="Geschlecht" ok-text="Ok" cancel-text="Abbrechen" [(ngModel)]="gender">
+                <ion-select-option value="FEMALE">Frau</ion-select-option>
+                <ion-select-option value="MALE">Mann</ion-select-option>
+                <ion-select-option value="OTHER">Sonstiges</ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="ion-text-start input-box">
+              <ion-select placeholder="Land" ok-text="Ok" cancel-text="Abbrechen" [(ngModel)]="country">
+                <ion-select-option value="AUSTRIA">Österreich</ion-select-option>
+                <ion-select-option value="GERMANY">Deutschland</ion-select-option>
+                <ion-select-option value="SWITZERLAND">Schweiz</ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Geburtstag" type="text" id="open-modal" [value]="formattedDate"></ion-input>
+            <ion-modal trigger="open-modal">
+              <ng-template>
+                <ion-content force-overscroll="false">
+                  <ion-datetime #datetime presentation="date" [value]="birthDate" (ionChange)="dateChanged(datetime.value)" showDefaultButtons="true"></ion-datetime>
+                </ion-content>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="update()">Änderungen übernhemen</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>
