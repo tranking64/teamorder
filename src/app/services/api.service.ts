@@ -113,6 +113,27 @@ export class ApiService {
         .pipe(catchError(this.handleError));
   }
 
+  deleteUser(dPassword, accessToken) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    .set('Authorization', accessToken);
+
+    const body = {
+      password: dPassword
+    };
+
+    return this.http.request('delete', 'https://diplom2021.itkaufmann.cloud/api/user/delete', {headers, body})
+      .pipe(catchError(this.handleError));
+  }
+
+  getCountries(): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json');
+
+      return this.http.get('https://diplom2021.itkaufmann.cloud/api/auth/countries', {headers})
+        .pipe(catchError(this.handleError));
+  }
+
   handleError(error) {
     return throwError(error);
   }

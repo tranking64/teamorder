@@ -38,6 +38,8 @@ export class Tab4Page {
         },
         (error) => {
           console.log(error);
+
+          this.router.navigate(['/login']);
         }
       );
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginData } from 'src/app/interfaces/login-data';
-import { ApiService } from 'src/app/services/api.service';
+import { LoginData } from '../../interfaces/login-data';
+import { ApiService } from '../../services/api.service';
 import { Storage } from '@capacitor/storage';
 import { LoadingController } from '@ionic/angular';
 
@@ -25,7 +25,24 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    // eslint-disable-next-line arrow-body-style
+    const toTitleCase = (phrase) => {
+      return phrase
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    };
+
     this.rememberLogin();
+
+    this.service.getCountries().subscribe(
+      (data) => {
+        data.data.forEach(element => {
+          console.log(element.country_type + ', ' + toTitleCase(element.country_type_de));
+        });
+      }
+    );
   }
 
   async rememberLogin() {
