@@ -1,20 +1,63 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-grid>
+    <div *ngIf="myInitialOrders.length !== 0">
+      <ion-row>
+        <ion-col>
+          <h2>Gestartete Bestellungen</h2>
+        </ion-col>
+      </ion-row>
+      <div *ngFor="let item of myInitialOrders">
+        <ion-row>
+          <ion-col>
+            <ion-card class="ion-activatable ripple-parent" >
+              <ion-card-content>
+                <ion-row>
+                  <ion-col>
+                    <h2>{{ item.group_name }}</h2>
+                    <p>Bestellort: {{ item.place }}</p>
+                  </ion-col>
+                </ion-row>
+              </ion-card-content>
+              <ion-ripple-effect></ion-ripple-effect>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
+
+    <div *ngIf="otherRunningOrders.length !== 0">
+      <ion-row>
+        <ion-col>
+          <h2>Laufende Bestellungen</h2>
+        </ion-col>
+      </ion-row>
+      <div *ngFor="let item of otherRunningOrders">
+        <ion-row>
+          <ion-col>
+            <ion-card class="ion-activatable ripple-parent" >
+              <ion-card-content>
+                <ion-row>
+                  <ion-col>
+                    <h2>{{ item.group_name }}</h2>
+                    <p>Bestellort: {{ item.place }}</p>
+                  </ion-col>
+                  <ion-col class="ion-text-end">
+                    {{ item.deadline.substring(11, item.deadline.length-3) }}
+                  </ion-col>
+                </ion-row>
+              </ion-card-content>
+              <ion-ripple-effect></ion-ripple-effect>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
+
+  </ion-grid>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
+    <ion-fab-button routerLink="/create-order">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

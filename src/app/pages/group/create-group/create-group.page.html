@@ -1,0 +1,29 @@
+<ion-content>
+  <div id="card">
+    <ion-icon routerLink="/tabs/tab2" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1><b>Gruppe erstellen</b></h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Name" type="text" [(ngModel)]="groupName"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-textarea autoGrow="true" maxlength="200" placeholder="Beschreibung (optional)" [(ngModel)]="description"></ion-textarea>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="create()">Erstellen</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

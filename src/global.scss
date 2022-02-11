@@ -63,7 +63,7 @@ ion-content {
       font-size: 14px;
     }
 
-    ion-input {
+    ion-input, ion-textarea {
       text-align: start;
       --background: white;
       border-radius: 5px;
@@ -79,6 +79,8 @@ ion-content {
     }
 
     ion-icon {
+      margin-left: 0 !important;
+      margin-top: 0 !important;
       font-size: 125px;
     }
 

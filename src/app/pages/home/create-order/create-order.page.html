@@ -1,0 +1,49 @@
+<ion-content>
+  <div id="card">
+    <ion-icon routerLink="/tabs/tab1" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1><b>Bestellung starten</b></h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-start input-box">
+              <ion-select placeholder="Gruppe" ok-text="Ok" cancel-text="Abbrechen" [(ngModel)]="selectedGroupId">
+                <div *ngFor="let groups of groupsArr">
+                  <div *ngFor="let item of groups">
+                    <ion-select-option value="{{ item.group_id }}">{{ item.group_name }}</ion-select-option>
+                  </div>
+                </div>
+              </ion-select>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Bestellort" type="text" [(ngModel)]="place"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Deadline" type="text" id="open-modal" [value]="formattedDatetime"></ion-input>
+            <ion-modal trigger="open-modal">
+              <ng-template>
+                <ion-content force-overscroll="false">
+                  <ion-datetime #datetime presentation="time" [value]="deadline" (ionChange)="dateChanged(datetime.value)" doneText="OK" cancelText="Abbrechen" showDefaultButtons="true"></ion-datetime>
+                </ion-content>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="start()">Starten</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

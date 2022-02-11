@@ -1,0 +1,29 @@
+<ion-content>
+  <div id="card">
+    <ion-icon (click)="getBack()" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1><b>Zur Gruppe einladen</b></h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <span>Gib die E-Mail der Person ein, die du einladen möchtest.</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="E-Mail" type="email" [(ngModel)]="email"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="invite()">Person einladen</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

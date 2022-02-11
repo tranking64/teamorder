@@ -1,0 +1,34 @@
+<ion-content>
+  <div id="card">
+    <ion-icon routerLink="/forgot-pw" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1><b>Neues Passwort</b></h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Erhaltener E-Mail-Code" type="text" [(ngModel)]="code"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Neues Passwort" type="password" [(ngModel)]="password"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Neues Passwort bestätigen" type="password" [(ngModel)]="cPassword"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="resetPassword()">Passwort zurücksetzen</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

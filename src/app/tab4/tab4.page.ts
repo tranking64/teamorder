@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../services/api.service';
 
 import { Storage } from '@capacitor/storage';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/api/auth.service';
+import { SettingsService } from '../services/api/settings.service';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-tab4',
@@ -11,33 +13,32 @@ import { Router } from '@angular/router';
 })
 export class Tab4Page {
 
-  constructor(private service: ApiService, private router: Router) { }
+  constructor(
+    private auth: AuthService,
+    private settings: SettingsService,
+    private router: Router,
+    private alert: AlertService) { }
 
   async logout() {
     const accessToken = await Storage.get({ key: 'access_token' });
     let email;
 
-    this.service.getCurrUserData(accessToken.value)
+    this.settings.getCurrUserData(accessToken.value)
       .subscribe(
-        (data) => {
+        data => {
           email = data.email;
         },
-        (error) => {
-          console.log(error);
+        error => {
+          this.alert.presentSimpleAlert(error.error.message);
         }
       );
 
-    this.service.logout(email, accessToken.value)
+    this.auth.logout(email, accessToken.value)
       .subscribe(
-        async (data) => {
+        async () => {
           // delete tokens
           await Storage.remove({ key: 'access_token' });
           await Storage.remove({ key: 'refresh_token' });
-
-          this.router.navigate(['/login']);
-        },
-        (error) => {
-          console.log(error);
 
           this.router.navigate(['/login']);
         }

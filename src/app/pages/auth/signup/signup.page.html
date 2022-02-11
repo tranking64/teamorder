@@ -1,0 +1,74 @@
+<ion-content>
+  <div id="card">
+    <ion-icon routerLink="/login" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1><b>Registrierung</b></h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Vorname" type="text" [(ngModel)]="firstName"></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input placeholder="Nachname" type="text" [(ngModel)]="lastName"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="E-Mail" type="email" [(ngModel)]="email"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Neues Passwort" type="password" [(ngModel)]="password"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Neues Passwort bestätigen" type="password" [(ngModel)]="cPassword"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-start input-box">
+              <ion-select placeholder="Geschlecht" ok-text="Ok" cancel-text="Abbrechen" [(ngModel)]="gender">
+                <div *ngFor="let item of genders">
+                  <ion-select-option value="{{ item.gender_type }}">{{ toTitleCase(item.gender_type_de) }}</ion-select-option>
+                </div>
+              </ion-select>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="ion-text-start input-box">
+              <ion-select placeholder="Land" ok-text="Ok" cancel-text="Abbrechen" [(ngModel)]="country">
+                <div *ngFor="let item of countries">
+                  <ion-select-option value="{{ item.country_type }}">{{ toTitleCase(item.country_type_de) }}</ion-select-option>
+                </div>
+              </ion-select>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input placeholder="Geburtstag" type="text" id="open-modal" [value]="formattedDate"></ion-input>
+            <ion-modal trigger="open-modal">
+              <ng-template>
+                <ion-content force-overscroll="false">
+                  <ion-datetime #datetime presentation="date" [value]="birthDate" (ionChange)="dateChanged(datetime.value)" doneText="OK" cancelText="Abbrechen" showDefaultButtons="true"></ion-datetime>
+                </ion-content>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="create()">Account erstellen</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,69 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-icon name="chevron-back-sharp" (click)="getBack()"></ion-icon>
+      </ion-col>
+      <!-- should only be visible for creators -->
+      <div *ngIf="myUser.role_type === 'ERSTELLER'">
+        <ion-col class="ion-text-end">
+          <ion-icon id="exitIcon" name="trash-sharp" (click)="deleteGroup()"></ion-icon>
+        </ion-col>
+      </div>
+      <div *ngIf="myUser.role_type === 'ADMIN' || myUser.role_type === 'MITGLIED'">
+        <ion-col class="ion-text-end">
+          <ion-icon id="exitIcon" name="exit" (click)="leaveGroup()"></ion-icon>
+        </ion-col>
+      </div>
+    </ion-row>
+    <div (click)="editGroup()">
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <h1>{{ currentGroup.group_name }}</h1>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <span>{{ currentGroup.description }}</span>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div *ngFor="let user of users">
+      <ion-row>
+        <ion-col>
+          <ion-card class="ion-activatable ripple-parent" (click)="editRole()">
+            <ion-card-content>
+              <ion-row>
+                <ion-col>
+                  <ion-row>
+                    <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+                  </ion-row>
+                  <ion-row>
+                    <span>{{ toTitleCase(user.role_type) }}</span>
+                  </ion-row>
+                </ion-col>
+                <div *ngIf="user.user_id !== myUser.user_id && (myUser.role_type === 'ERSTELLER' || myUser.role_type === 'ADMIN' && user.role_type === 'MITGLIED')">
+                  <ion-col class="ion-text-end">
+                    <ion-icon name="pencil-sharp"></ion-icon>
+                  </ion-col>
+                </div>
+              </ion-row>
+            </ion-card-content>
+            <ion-ripple-effect></ion-ripple-effect>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="myUser.role_type === 'ERSTELLER' || myUser.role_type === 'ADMIN'">
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="invite()">
+            <ion-icon slot="start" name="person-add"></ion-icon>
+            Personen einladen
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-grid>
+</ion-content>
