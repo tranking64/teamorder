@@ -21,7 +21,6 @@ export class DetailGroupPagePage implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private groupService: GroupService,
     private settings: SettingsService,
     private navCtrl: NavController,
@@ -150,12 +149,60 @@ export class DetailGroupPagePage implements OnInit {
     this.presentLeaveAlert();
   }
 
+  async presentRemoveAlert(currUser) {
+    const accessToken = await Storage.get({ key: 'access_token' });
+
+    const alert = await this.alertCtrl.create({
+      header: 'Warnung',
+      message: 'Möchtest du diesen Benuter wirklich aus der Gruppe entfernen?',
+      buttons: [
+        {
+          text: 'Nein',
+          role: 'cancel',
+          //cssClass: 'secondary',
+          id: 'cancel-button',
+          handler: () => {
+          }
+        }, {
+          text: 'Ja',
+          id: 'confirm-button',
+          handler: () => {
+            this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, currUser.user_id)
+              .subscribe(
+                // bypass load bug
+                () => this.router.navigate(['/tabs/tab2'])
+              );
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  removeUser(user) {
+    this.presentRemoveAlert(user);
+  }
+
   invite() {
     const navExtras: NavigationExtras = {
       state: this.currentGroup
     };
 
     this.router.navigate(['invite-person'], navExtras);
+  }
+
+  manageUser(currentUser) {
+    const data = {
+      user: currentUser,
+      group: this.currentGroup
+    };
+
+    const navExtras: NavigationExtras = {
+      state: data
+    };
+
+    this.router.navigate(['manage-user'], navExtras);
   }
 
   toTitleCase = (phrase) =>

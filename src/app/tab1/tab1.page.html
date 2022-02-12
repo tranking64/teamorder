@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content forceOverscroll="false">
 
   <ion-grid>
     <div *ngIf="myInitialOrders.length !== 0">
@@ -35,15 +35,15 @@
       <div *ngFor="let item of otherRunningOrders">
         <ion-row>
           <ion-col>
-            <ion-card class="ion-activatable ripple-parent" >
+            <ion-card class="ion-activatable ripple-parent" (click)="orderWith(item)">
               <ion-card-content>
                 <ion-row>
                   <ion-col>
                     <h2>{{ item.group_name }}</h2>
                     <p>Bestellort: {{ item.place }}</p>
                   </ion-col>
-                  <ion-col class="ion-text-end">
-                    {{ item.deadline.substring(11, item.deadline.length-3) }}
+                  <ion-col style="color: red;" class="ion-text-end">
+                    bis {{ item.deadline.substring(11, item.deadline.length-3) }}
                   </ion-col>
                 </ion-row>
               </ion-card-content>

@@ -65,6 +65,14 @@ const routes: Routes = [
   },  {
     path: 'create-order',
     loadChildren: () => import('./pages/home/create-order/create-order.module').then( m => m.CreateOrderPageModule)
+  },
+  {
+    path: 'manage-user',
+    loadChildren: () => import('./pages/group/manage-user/manage-user.module').then( m => m.ManageUserPageModule)
+  },
+  {
+    path: 'order-with',
+    loadChildren: () => import('./pages/home/order-with/order-with.module').then( m => m.OrderWithPageModule)
   }
 
 

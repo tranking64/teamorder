@@ -20,4 +20,10 @@ export class EnumerationDataService {
 
     return this.http.get('https://diplom2021.itkaufmann.cloud/api/auth/genders', {headers});
   }
+
+  fetchRoles(): Observable<any> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.http.get('https://diplom2021.itkaufmann.cloud/api/group/roles', {headers});
+  }
 }

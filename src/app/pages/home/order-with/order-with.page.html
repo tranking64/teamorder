@@ -1,0 +1,48 @@
+<ion-content>
+  <div id="card">
+    <ion-icon routerLink="/tabs/tab1" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+    <div id="container">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1><b>Mitbestellung</b></h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-text-end">
+            <b>Gruppe:</b>
+          </ion-col>
+          <ion-col class="ion-text-start">
+            {{ initialOrderData.group_name }}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-text-end">
+            <b>Bestellort:</b>
+          </ion-col>
+          <ion-col class="ion-text-start">
+            {{ initialOrderData.place }}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-text-end">
+            <b>Gestartet von:</b>
+          </ion-col>
+          <ion-col class="ion-text-start">
+            {{ initialOrderData.initial_user_id }}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-textarea autoGrow="true" maxlength="200" placeholder="Was möchtest du mitbestellen?" [(ngModel)]="orderContent"></ion-textarea>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="send()">Abschicken</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

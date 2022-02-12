@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { OrderService } from '../services/api/order.service';
 import { Storage } from '@capacitor/storage';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab1',
@@ -13,7 +14,8 @@ export class Tab1Page {
   otherRunningOrders = [];
 
   constructor(
-    private orderService: OrderService
+    private orderService: OrderService,
+    private router: Router
   ) {}
 
   ionViewWillEnter() {
@@ -37,6 +39,14 @@ export class Tab1Page {
       .subscribe(
         data => this.myInitialOrders = data.data
       );
+  }
+
+  orderWith(initialOrderData) {
+    const navExtras: NavigationExtras = {
+      state: initialOrderData
+    };
+
+    this.router.navigate(['order-with'], navExtras);
   }
 
 }

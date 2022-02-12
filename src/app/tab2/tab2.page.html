@@ -1,23 +1,6 @@
-<ion-content>
+<ion-content forceOverscroll="false">
 
   <ion-grid>
-    <!--<ion-row>
-      <ion-col>
-        <h2>Von dir erstellte Gruppen</h2>
-      </ion-col>
-    </ion-row>
-    <div *ngIf="creatorGroups.length === 0">
-      <ion-row>
-        <ion-col>
-          <ion-card class="ion-activatable ripple-parent">
-            <ion-card-content>
-              <p>Du hast noch keine Gruppen erstellt!</p>
-            </ion-card-content>
-            <ion-ripple-effect></ion-ripple-effect>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </div>-->
     <div *ngIf="creatorGroups.length !== 0">
       <ion-row>
         <ion-col>
@@ -74,8 +57,8 @@
                     <h2>{{ item.group_name }}</h2>
                   </ion-col>
                   <ion-col class="ion-text-end">
-                    <ion-icon style="color: green" color name="checkmark-sharp" (click)="acceptInvite(item.group_id)"></ion-icon>
-                    <ion-icon style="color: red" name="close-sharp" (click)="declineInvite(item.group_id)"></ion-icon>
+                    <ion-icon color="success" name="checkmark-sharp" (click)="acceptInvite(item.group_id)"></ion-icon>
+                    <ion-icon color="danger" name="close-sharp" (click)="declineInvite(item.group_id)"></ion-icon>
                   </ion-col>
                 </ion-row>
               </ion-card-content>

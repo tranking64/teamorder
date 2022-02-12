@@ -44,6 +44,24 @@ export class GroupService {
     return this.http.put('https://diplom2021.itkaufmann.cloud/api/group/update/' + id, {group_name: groupName, group_description: description}, {headers});
   }
 
+  changeRole(accessToken, groupId, userId, roleType): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', accessToken);
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    return this.http.put('https://diplom2021.itkaufmann.cloud/api/group/changeRole', {group_id: groupId, user_id: userId, role: roleType}, {headers});
+  }
+
+  removeUser(accessToken, groupId, userId): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', accessToken);
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    return this.http.put('https://diplom2021.itkaufmann.cloud/api/group/removeUser', {group_id: groupId, user_id: userId}, {headers});
+  }
+
   deleteGroup(accessToken, id) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json')

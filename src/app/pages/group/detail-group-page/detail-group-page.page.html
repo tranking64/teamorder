@@ -2,17 +2,17 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-icon name="chevron-back-sharp" (click)="getBack()"></ion-icon>
+        <ion-icon name="chevron-back-sharp" color="medium" (click)="getBack()"></ion-icon>
       </ion-col>
       <!-- should only be visible for creators -->
       <div *ngIf="myUser.role_type === 'ERSTELLER'">
         <ion-col class="ion-text-end">
-          <ion-icon id="exitIcon" name="trash-sharp" (click)="deleteGroup()"></ion-icon>
+          <ion-icon color="danger" name="trash-sharp" (click)="deleteGroup()"></ion-icon>
         </ion-col>
       </div>
       <div *ngIf="myUser.role_type === 'ADMIN' || myUser.role_type === 'MITGLIED'">
         <ion-col class="ion-text-end">
-          <ion-icon id="exitIcon" name="exit" (click)="leaveGroup()"></ion-icon>
+          <ion-icon color="danger" name="exit" (click)="leaveGroup()"></ion-icon>
         </ion-col>
       </div>
     </ion-row>
@@ -31,26 +31,65 @@
     <div *ngFor="let user of users">
       <ion-row>
         <ion-col>
-          <ion-card class="ion-activatable ripple-parent" (click)="editRole()">
-            <ion-card-content>
-              <ion-row>
-                <ion-col>
+          <div *ngIf="(user.user_id !== myUser.user_id && (myUser.role_type === 'ERSTELLER' || myUser.role_type === 'ADMIN' && user.role_type === 'MITGLIED')); then thenBlock else elseBlock"></div>
+          <ng-template #thenBlock>
+            <div *ngIf="myUser.role_type === 'ERSTELLER'; then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+              <ion-card class="ion-activatable ripple-parent" (click)="manageUser(user)">
+                <ion-card-content>
                   <ion-row>
-                    <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+                    <ion-col>
+                      <ion-row>
+                        <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+                      </ion-row>
+                      <ion-row>
+                        <span>{{ toTitleCase(user.role_type) }}</span>
+                      </ion-row>
+                    </ion-col>
+                    <ion-col class="ion-text-end">
+                      <ion-icon name="pencil-sharp"></ion-icon>
+                    </ion-col>
                   </ion-row>
+                </ion-card-content>
+                <ion-ripple-effect></ion-ripple-effect>
+              </ion-card>
+            </ng-template>
+            <ng-template #elseBlock>
+              <ion-card>
+                <ion-card-content>
                   <ion-row>
-                    <span>{{ toTitleCase(user.role_type) }}</span>
+                    <ion-col>
+                      <ion-row>
+                        <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+                      </ion-row>
+                      <ion-row>
+                        <span>{{ toTitleCase(user.role_type) }}</span>
+                      </ion-row>
+                    </ion-col>
+                    <ion-col class="ion-text-end">
+                      <ion-icon (click)="removeUser(user)" color="danger" name="person-remove"></ion-icon>
+                    </ion-col>
                   </ion-row>
-                </ion-col>
-                <div *ngIf="user.user_id !== myUser.user_id && (myUser.role_type === 'ERSTELLER' || myUser.role_type === 'ADMIN' && user.role_type === 'MITGLIED')">
-                  <ion-col class="ion-text-end">
-                    <ion-icon name="pencil-sharp"></ion-icon>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+          </ng-template>
+          <ng-template #elseBlock>
+            <ion-card>
+              <ion-card-content>
+                <ion-row>
+                  <ion-col>
+                    <ion-row>
+                      <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+                    </ion-row>
+                    <ion-row>
+                      <span>{{ toTitleCase(user.role_type) }}</span>
+                    </ion-row>
                   </ion-col>
-                </div>
-              </ion-row>
-            </ion-card-content>
-            <ion-ripple-effect></ion-ripple-effect>
-          </ion-card>
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
         </ion-col>
       </ion-row>
     </div>
