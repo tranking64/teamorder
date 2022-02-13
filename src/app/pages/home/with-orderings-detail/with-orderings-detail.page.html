@@ -1,0 +1,56 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-icon routerLink="/tabs/tab1" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <h1><b>Aktuelle Mitbestellung</b></h1>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <b>Gruppe:</b>
+      </ion-col>
+      <ion-col class="ion-text-start">
+        {{ currData.group_name }}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <b>Bestellort:</b>
+      </ion-col>
+      <ion-col class="ion-text-start">
+        {{ currData.place }}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <b>Gestartet von:</b>
+      </ion-col>
+      <ion-col class="ion-text-start">
+        {{ currData.initial_user }}
+      </ion-col>
+    </ion-row>
+
+    <div *ngFor="let item of currData.orders">
+      <ion-row>
+        <ion-col>
+          <ion-card>
+            <ion-card-content>
+              <ion-row>
+                <ion-col>
+                  <p>{{ item.order_content }}</p>
+                </ion-col>
+              </ion-row>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </div>
+
+  </ion-grid>
+</ion-content>

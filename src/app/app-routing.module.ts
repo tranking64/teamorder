@@ -73,6 +73,14 @@ const routes: Routes = [
   {
     path: 'order-with',
     loadChildren: () => import('./pages/home/order-with/order-with.module').then( m => m.OrderWithPageModule)
+  },
+  {
+    path: 'order-detail',
+    loadChildren: () => import('./pages/home/order-detail/order-detail.module').then( m => m.OrderDetailPageModule)
+  },
+  {
+    path: 'with-orderings-detail',
+    loadChildren: () => import('./pages/home/with-orderings-detail/with-orderings-detail.module').then( m => m.WithOrderingsDetailPageModule)
   }
 
 

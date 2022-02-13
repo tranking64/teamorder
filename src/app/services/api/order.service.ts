@@ -42,6 +42,14 @@ export class OrderService {
     );
   }
 
+  getSpecificOrders(accessToken, initialOrderId): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', accessToken);
+
+    return this.http.get('https://diplom2021.itkaufmann.cloud/api/orders/get/initialOrders/' + initialOrderId, {headers});
+  }
+
   getOtherOrders(accessToken): Observable<any> {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
@@ -56,5 +64,31 @@ export class OrderService {
       .set('Authorization', accessToken);
 
     return this.http.get('https://diplom2021.itkaufmann.cloud/api/orders/get/initialOrders', {headers});
+  }
+
+  getWithOrderings(accessToken): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', accessToken);
+
+    return this.http.get('https://diplom2021.itkaufmann.cloud/api/orders/get/orders', {headers});
+  }
+
+  finishOrder(accessToken, orderId): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', accessToken);
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    return this.http.put('https://diplom2021.itkaufmann.cloud/api/orders/finished', {initial_order_id: orderId}, {headers});
+  }
+
+  updatePrice(accessToken, orderId, priceDebt): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', accessToken);
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    return this.http.put('https://diplom2021.itkaufmann.cloud/api/orders/update/price', {order_id: orderId, price: priceDebt}, {headers});
   }
 }
