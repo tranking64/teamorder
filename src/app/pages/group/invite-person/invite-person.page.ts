@@ -5,7 +5,6 @@ import { GroupService } from '../../../services/api/group.service';
 import { AlertService } from '../../../services/alert.service';
 import { LoadingService } from '../../../services/loading.service';
 import { Router } from '@angular/router';
-import { errorMonitor } from 'events';
 
 @Component({
   selector: 'app-invite-person',

@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class WithOrderingsDetailPage implements OnInit {
 
   currData;
+  orders = [];
 
   constructor(
     private router: Router
@@ -17,6 +18,11 @@ export class WithOrderingsDetailPage implements OnInit {
   ngOnInit() {
     const routerState = this.router.getCurrentNavigation().extras.state;
     this.currData = routerState;
+    this.orders = this.currData.orders;
+  }
+
+  test(item) {
+    this.orders = this.orders.filter(element => element !== item);
   }
 
 }

@@ -16,18 +16,35 @@
         </ion-col>
       </div>
     </ion-row>
-    <div (click)="editGroup()">
-      <ion-row>
-        <ion-col class="ion-text-center">
-          <h1>{{ currentGroup.group_name }}</h1>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col class="ion-text-center">
-          <span>{{ currentGroup.description }}</span>
-        </ion-col>
-      </ion-row>
-    </div>
+    <div *ngIf="myUser.role_type === 'ERSTELLER'; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+      <div (click)="editGroup()">
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <h1>{{ currentGroup.group_name }}</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <span>{{ currentGroup.description }}</span>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ng-template>
+    <ng-template #elseBlock>
+      <div>
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <h1>{{ currentGroup.group_name }}</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <span>{{ currentGroup.description }}</span>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ng-template>
     <div *ngFor="let user of users">
       <ion-row>
         <ion-col>

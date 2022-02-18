@@ -36,11 +36,11 @@
       </ion-col>
     </ion-row>
 
-    <div *ngFor="let item of currData.orders">
+    <div *ngFor="let item of orders">
       <ion-row>
         <ion-col>
           <ion-card>
-            <ion-card-content>
+            <ion-card-content (click)="test(item)">
               <ion-row>
                 <ion-col>
                   <p>{{ item.order_content }}</p>
