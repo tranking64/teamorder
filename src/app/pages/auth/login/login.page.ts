@@ -5,6 +5,10 @@ import { AlertService } from 'src/app/services/alert.service';
 import { AuthService } from 'src/app/services/api/auth.service';
 import { LoadingService } from 'src/app/services/loading.service';
 
+import { Platform } from '@ionic/angular';
+import OneSignal from 'onesignal-cordova-plugin';
+import { SettingsService } from 'src/app/services/api/settings.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -19,7 +23,37 @@ export class LoginPage implements OnInit {
     private auth: AuthService,
     private router: Router,
     private loading: LoadingService,
-    private alert: AlertService) {}
+    private alert: AlertService,
+    private platform: Platform,
+    private settings: SettingsService) { }
+
+  async oneSignalInit() {
+    const accessToken = await Storage.get({ key: 'access_token' });
+
+    this.settings.getCurrUserData(accessToken.value)
+      .subscribe(
+        data => {
+          OneSignal.setAppId('0c86885f-d9c7-4d92-8cc9-11a1afa6f697');
+          OneSignal.setExternalUserId(data.user_id.toString());
+
+          // eslint-disable-next-line max-len
+          if (data.country.country_type === 'AUSTRIA' || data.country.country_type === 'GERMANY' || data.country.country_type === 'SWITZERLAND') {
+            OneSignal.setLanguage('de');
+          }
+          else {
+            OneSignal.setLanguage('en');
+          }
+
+          /*OneSignal.setNotificationOpenedHandler(jsonData => {
+            console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
+          });
+
+          OneSignal.promptForPushNotificationsWithUserResponse(accepted => {
+              console.log('User accepted notifications: ' + accepted);
+          });*/
+        }
+      );
+  }
 
   // called e.g. when from logout --> login
   // removing old inpunts
@@ -50,6 +84,10 @@ export class LoginPage implements OnInit {
             await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
             await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
 
+            console.log('refresh works');
+
+            this.platform.ready().then(() => this.oneSignalInit());
+
             this.loading.dismissLoading();
 
             this.router.navigate(['/tabs/tab1']);
@@ -58,6 +96,8 @@ export class LoginPage implements OnInit {
             // delete possible old unvalid tokens
             await Storage.remove({ key: 'access_token' });
             await Storage.remove({ key: 'refresh_token' });
+
+            OneSignal.removeExternalUserId();
 
             this.loading.dismissLoading();
             console.log(error);
@@ -93,11 +133,17 @@ export class LoginPage implements OnInit {
           await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
           await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
 
+          console.log('login works');
+
+          this.platform.ready().then(() => this.oneSignalInit());
+
           this.loading.dismissLoading();
 
           this.router.navigate(['/tabs/tab1']);
         },
         (error) => {
+          OneSignal.removeExternalUserId();
+
           this.loading.dismissLoading();
 
           const errorCode = error.status;

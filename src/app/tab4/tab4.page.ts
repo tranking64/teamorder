@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/api/auth.service';
 import { SettingsService } from '../services/api/settings.service';
 import { AlertService } from '../services/alert.service';
+import OneSignal from 'onesignal-cordova-plugin';
 
 @Component({
   selector: 'app-tab4',
@@ -22,6 +23,8 @@ export class Tab4Page {
   async logout() {
     const accessToken = await Storage.get({ key: 'access_token' });
     let email;
+
+    OneSignal.removeExternalUserId();
 
     this.settings.getCurrUserData(accessToken.value)
       .subscribe(

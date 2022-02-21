@@ -30,7 +30,7 @@ export class SignupPage implements OnInit {
   cPassword = '';
   gender = '';
   country = '';
-  birthDate = format(new Date(), 'yyyy-MM-dd');
+  birthDate; // = format(new Date(), 'yyyy-MM-dd');
 
   constructor(
     private alertCtrl: AlertController,
@@ -64,7 +64,7 @@ export class SignupPage implements OnInit {
   create() {
     // check if everything is filled
     if (this.firstName === '' || this.lastName === '' || this.email === '' || this.password === '' ||
-        this.cPassword === '' || this.gender === '' || this.country === '' || this.birthDate === '') {
+        this.cPassword === '' || this.gender === '' || this.country === '' || this.formattedDate === '') {
           this.alert.presentSimpleAlert('Bitte fülle alle Eingabefelder aus!');
         }
 
@@ -94,9 +94,16 @@ export class SignupPage implements OnInit {
             this.toast.presentSimpleToast('Konto wurde erfolgreich erstellt. Du erhaltest in Kürze eine Verifizierungsmail!');
           },
           error => {
-            // check http code and handle error
-            // but actually should never happen except the server is down
-            this.alert.presentSimpleAlert(error.error.message);
+            this.loading.dismissLoading();
+
+            if (error.message.email !== null) {
+              this.alert.presentSimpleAlert('Diese E-Mail-Adresse ist bereits vergeben!');
+            }
+            else {
+              // check http code and handle error
+              // but actually should never happen except the server is down
+              this.alert.presentSimpleAlert(error.error.message);
+            }
           }
         );
     }
