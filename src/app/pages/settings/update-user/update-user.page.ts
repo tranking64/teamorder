@@ -37,9 +37,9 @@ export class UpdateUserPage implements OnInit {
 
   ionViewWillEnter() {
     this.loading.presentLoading();
+    this.getUserData();
     this.getCountries();
     this.getGenders();
-    this.getUserData();
   }
 
   toTitleCase = (phrase) =>

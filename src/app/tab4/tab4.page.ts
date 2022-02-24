@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 
 import { Storage } from '@capacitor/storage';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { AuthService } from '../services/api/auth.service';
 import { SettingsService } from '../services/api/settings.service';
 import { AlertService } from '../services/alert.service';
 import OneSignal from 'onesignal-cordova-plugin';
+import { Platform } from '@ionic/angular';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-tab4',
@@ -18,13 +20,19 @@ export class Tab4Page {
     private auth: AuthService,
     private settings: SettingsService,
     private router: Router,
-    private alert: AlertService) { }
+    private alert: AlertService,
+    private platform: Platform,
+    private loading: LoadingService) { }
+
+  navigateTo(url) {
+    this.router.navigate(['/' + url]);
+  }
 
   async logout() {
     const accessToken = await Storage.get({ key: 'access_token' });
     let email;
 
-    OneSignal.removeExternalUserId();
+    this.platform.ready().then(() => OneSignal.removeExternalUserId());
 
     this.settings.getCurrUserData(accessToken.value)
       .subscribe(

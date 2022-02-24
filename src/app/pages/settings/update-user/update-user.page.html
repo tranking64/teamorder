@@ -33,7 +33,7 @@
           </ion-col>
           <ion-col>
             <div class="ion-text-start input-box">
-              <ion-select placeholder="Land" ok-text="Ok" cancel-text="Abbrechen" [(ngModel)]="country">
+              <ion-select placeholder="Land" ok-text="Ok" cancel-text="Abbrechen" value="userData.country.country_type" [(ngModel)]="country">
                 <div *ngFor="let item of countries">
                   <ion-select-option value="{{ item.country_type }}">{{ toTitleCase(item.country_type_de) }}</ion-select-option>
                 </div>

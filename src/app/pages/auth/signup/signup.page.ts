@@ -30,7 +30,7 @@ export class SignupPage implements OnInit {
   cPassword = '';
   gender = '';
   country = '';
-  birthDate; // = format(new Date(), 'yyyy-MM-dd');
+  birthDate = format(new Date(), 'yyyy-MM-dd');
 
   constructor(
     private alertCtrl: AlertController,
@@ -76,6 +76,10 @@ export class SignupPage implements OnInit {
       this.alert.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
     }
 
+    else if (this.password.length < 7 && this.cPassword.length < 7) {
+      this.alert.presentSimpleAlert('Passwörter müssen mindestens 8 Zeichen haben!');
+    }
+
     // check if passwords match
     else if (this.password !== this.cPassword) {
       this.alert.presentSimpleAlert('Die eingegebenen Passwörter stimmen nicht überrein!');
@@ -96,7 +100,7 @@ export class SignupPage implements OnInit {
           error => {
             this.loading.dismissLoading();
 
-            if (error.message.email !== null) {
+            if (error.error.status === 'email') {
               this.alert.presentSimpleAlert('Diese E-Mail-Adresse ist bereits vergeben!');
             }
             else {

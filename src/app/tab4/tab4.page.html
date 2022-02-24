@@ -1,35 +1,35 @@
 <ion-content forceOverscroll="false">
   <ion-grid>
     <h2>Konto</h2>
-    <ion-row class="box" routerLink="/update-user">
+    <ion-row class="box" (click)="navigateTo('update-user')">
       <ion-col>
         <span>Daten ändern</span>
       </ion-col>
-      <ion-col class="ion-text-right">
+      <ion-col class="ion-text-end">
         <ion-icon name="chevron-forward-sharp"></ion-icon>
       </ion-col>
     </ion-row>
-    <ion-row class="box" routerLink="/change-pw">
+    <ion-row class="box" (click)="navigateTo('change-pw')">
       <ion-col>
         <span>Passwort ändern</span>
       </ion-col>
-      <ion-col class="ion-text-right">
+      <ion-col class="ion-text-end">
         <ion-icon name="chevron-forward-sharp"></ion-icon>
       </ion-col>
     </ion-row>
-    <ion-row class="box" routerLink="/delete-acc">
+    <ion-row class="box" (click)="navigateTo('delete-acc')">
       <ion-col>
         <span>Konto löschen</span>
       </ion-col>
-      <ion-col class="ion-text-right">
+      <ion-col class="ion-text-end">
         <ion-icon name="chevron-forward-sharp"></ion-icon>
       </ion-col>
     </ion-row>
-    <ion-row class="box" routerLink="/personal-data">
+    <ion-row class="box" (click)="navigateTo('personal-data')">
       <ion-col>
         <span>Kontodaten anfordern</span>
       </ion-col>
-      <ion-col class="ion-text-right">
+      <ion-col class="ion-text-end">
         <ion-icon name="chevron-forward-sharp"></ion-icon>
       </ion-col>
     </ion-row>
@@ -38,7 +38,7 @@
       <ion-col>
         <span>Dunkler Modus</span>
       </ion-col>
-      <ion-col id="switch" class="ion-text-right">
+      <ion-col id="switch" class="ion-text-end">
         <ion-toggle color="primary"></ion-toggle>
       </ion-col>
     </ion-row>

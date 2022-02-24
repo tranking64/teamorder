@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { GroupService } from '../../../services/api/group.service';
 import { Storage } from '@capacitor/storage';
-import { NavController, AlertController } from '@ionic/angular';
+import { NavController, AlertController, ActionSheetController } from '@ionic/angular';
 import { SettingsService } from 'src/app/services/api/settings.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-detail-group-page',
@@ -24,20 +25,20 @@ export class DetailGroupPagePage implements OnInit {
     private groupService: GroupService,
     private settings: SettingsService,
     private navCtrl: NavController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private loading: LoadingService,
+    private actionSheetCtrl: ActionSheetController
     ) {
 
   }
 
   ngOnInit() {
+    this.loading.presentLoading();
     this.currentGroup = this.router.getCurrentNavigation().extras.state;
     this.fetchData(this.currentGroup);
   }
 
   ionViewWillEnter() {
-    //this.currentGroup = this.router.getCurrentNavigation().extras.state;
-    //this.fetchData(this.currentGroup);
-    this.getMyUser();
   }
 
   async fetchData(routerState) {
@@ -48,6 +49,7 @@ export class DetailGroupPagePage implements OnInit {
         async data => {
           this.users = data.data.users;
           await this.getMyUser();
+          this.loading.dismissLoading();
         }
       );
   }
@@ -107,7 +109,7 @@ export class DetailGroupPagePage implements OnInit {
       ]
     });
 
-
+    await alert.present();
   }
 
   deleteGroup() {
@@ -169,8 +171,8 @@ export class DetailGroupPagePage implements OnInit {
           handler: () => {
             this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, currUser.user_id)
               .subscribe(
-                // bypass load bug
-                () => this.router.navigate(['/tabs/tab2'])
+                // remove user in view
+                () => this.users = this.users.filter(elem => elem !== currUser)
               );
           }
         }
@@ -181,7 +183,146 @@ export class DetailGroupPagePage implements OnInit {
   }
 
   removeUser(user) {
-    this.presentRemoveAlert(user);
+    this.presentActionSheet(user);
+  }
+
+  async presentActionSheet(user) {
+    const accessToken = await Storage.get({ key: 'access_token' });
+
+    console.log(user);
+
+    const actionSheet = await this.actionSheetCtrl.create({
+      //header: 'Einstellungen',
+      buttons: [
+        {
+          text: 'Aus Gruppe entfernen',
+          role: 'destructive',
+          //icon: 'trash',
+          handler: () => {
+            //this.presentRemoveAlert(user);
+            this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, user.user_id)
+                .subscribe(
+                  // remove user in view
+                  () => this.users = this.users.filter(elem => elem !== user)
+                );
+          }
+        },
+        {
+          text: 'Abbrechen',
+          //icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await actionSheet.present();
+
+    const { role } = await actionSheet.onDidDismiss();
+  }
+
+  async presentAdminActionSheet(user) {
+    const accessToken = await Storage.get({ key: 'access_token' });
+
+    let actionSheet;
+
+    if(user.role_type_en === 'MEMBER') {
+      actionSheet = await this.actionSheetCtrl.create({
+        //header: 'Einstellungen',
+        buttons: [
+          {
+            text: 'Aus Gruppe entfernen',
+            role: 'destructive',
+            //icon: 'trash',
+            handler: () => {
+              //this.presentRemoveAlert(user);
+              this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, user.user_id)
+                  .subscribe(
+                    // remove user in view
+                    () => this.users = this.users.filter(elem => elem !== user)
+                  );
+            }
+          },
+          {
+            text: 'Zum Admin befördern',
+            handler: () => {
+              this.groupService.changeRole(
+                accessToken.value,
+                this.currentGroup,
+                user.user_id,
+                'ADMIN')
+                  .subscribe(
+                    data => {
+                      const objIndex = this.users.findIndex((elem => elem.user_id === user.user_id));
+                      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                      this.users[objIndex].role_type_en = 'ADMIN';
+                      this.users[objIndex].role_type = 'ADMIN';
+
+                      console.log(this.users);
+
+                      //this.router.navigate(['/tabs/tab2']);
+                    }
+                  );
+            }
+          },
+          {
+            text: 'Abbrechen',
+            //icon: 'close',
+            role: 'cancel'
+          }
+        ]
+      });
+    }
+    else {
+      actionSheet = await this.actionSheetCtrl.create({
+        //header: 'Einstellungen',
+        buttons: [
+          {
+            text: 'Aus Gruppe entfernen',
+            role: 'destructive',
+            //icon: 'trash',
+            handler: () => {
+              //this.presentRemoveAlert(user);
+              this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, user.user_id)
+                  .subscribe(
+                    // remove user in view
+                    () => this.users = this.users.filter(elem => elem !== user)
+                  );
+            }
+          },
+          {
+            text: 'Zum Mitglied degradieren',
+            handler: () => {
+              user.role_type_en = 'MEMBER';
+
+              this.groupService.changeRole(
+                accessToken.value,
+                this.currentGroup,
+                user.user_id,
+                user.role_type_en)
+                  .subscribe(
+                    data => {
+                      const objIndex = this.users.findIndex((elem => elem.user_id === user.user_id));
+                      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                      this.users[objIndex].role_type_en = 'MEMBER';
+                      this.users[objIndex].role_type = 'MEMBER';
+
+                      //this.router.navigate(['/tabs/tab2']);
+                    }
+                  );
+            }
+          },
+          {
+            text: 'Abbrechen',
+            //icon: 'close',
+            role: 'cancel'
+          }
+        ]
+      });
+    }
+
+    await actionSheet.present();
+
+    const { role } = await actionSheet.onDidDismiss();
   }
 
   invite() {
@@ -193,7 +334,9 @@ export class DetailGroupPagePage implements OnInit {
   }
 
   manageUser(currentUser) {
-    const data = {
+    this.presentAdminActionSheet(currentUser);
+
+    /*const data = {
       user: currentUser,
       group: this.currentGroup
     };
@@ -202,7 +345,7 @@ export class DetailGroupPagePage implements OnInit {
       state: data
     };
 
-    this.router.navigate(['manage-user'], navExtras);
+    this.router.navigate(['manage-user'], navExtras);*/
   }
 
   toTitleCase = (phrase) =>

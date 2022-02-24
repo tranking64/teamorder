@@ -1,12 +1,13 @@
 <ion-content forceOverscroll="false">
 
   <ion-grid>
-    <div *ngIf="myInitialOrders.length !== 0">
-      <ion-row>
-        <ion-col>
-          <h2>Gestartete Bestellungen</h2>
-        </ion-col>
-      </ion-row>
+    <ion-row>
+      <ion-col>
+        <h2>Erstellte Bestellungen</h2>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="myInitialOrders.length !== 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
       <div *ngFor="let item of myInitialOrders">
         <ion-row>
           <ion-col>
@@ -24,14 +25,26 @@
           </ion-col>
         </ion-row>
       </div>
-    </div>
-
-    <div *ngIf="otherRunningOrders.length !== 0">
+    </ng-template>
+    <ng-template #elseBlock>
       <ion-row>
         <ion-col>
-          <h2>Laufende Bestellungen</h2>
+          <ion-card>
+            <ion-card-content class="ion-text-center">
+              <p>Aktuell keine</p>
+            </ion-card-content>
+          </ion-card>
         </ion-col>
       </ion-row>
+    </ng-template>
+
+    <ion-row>
+      <ion-col>
+        <h2>Möglichkeiten mitzubestellen</h2>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="otherRunningOrders.length !== 0; then runningThenBlock else runningElseBlock"></div>
+    <ng-template #runningThenBlock>
       <div *ngFor="let item of otherRunningOrders">
         <ion-row>
           <ion-col>
@@ -52,14 +65,26 @@
           </ion-col>
         </ion-row>
       </div>
-    </div>
-
-    <div *ngIf="currentWithOrderings.length !== 0">
+    </ng-template>
+    <ng-template #runningElseBlock>
       <ion-row>
         <ion-col>
-          <h2>Aktuelle Mitbestellungen</h2>
+          <ion-card>
+            <ion-card-content class="ion-text-center">
+              <p>Aktuell keine</p>
+            </ion-card-content>
+          </ion-card>
         </ion-col>
       </ion-row>
+    </ng-template>
+
+    <ion-row>
+      <ion-col>
+        <h2>Laufende Mitbestellungen</h2>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="currentWithOrderings.length !== 0; then orderingsThenBlock else orderingsElseBlock"></div>
+    <ng-template #orderingsThenBlock>
       <div *ngFor="let item of currentWithOrderings">
         <ion-row>
           <ion-col>
@@ -80,7 +105,18 @@
           </ion-col>
         </ion-row>
       </div>
-    </div>
+    </ng-template>
+    <ng-template #orderingsElseBlock>
+      <ion-row>
+        <ion-col>
+          <ion-card>
+            <ion-card-content class="ion-text-center">
+              <p>Aktuell keine</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ng-template>
 
   </ion-grid>
 

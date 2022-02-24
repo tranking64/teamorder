@@ -1,12 +1,14 @@
 <ion-content forceOverscroll="false">
 
   <ion-grid>
-    <div *ngIf="creatorGroups.length !== 0">
-      <ion-row>
-        <ion-col>
-          <h2>Von dir erstellte Gruppen</h2>
-        </ion-col>
-      </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <h2>Von dir erstellte Gruppen</h2>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="creatorGroups.length !== 0; then creatorThenBlock else creatorElseBlock"></div>
+    <ng-template #creatorThenBlock>
       <div *ngFor="let item of creatorGroups">
         <ion-row>
           <ion-col>
@@ -19,27 +21,52 @@
           </ion-col>
         </ion-row>
       </div>
-    </div>
-
-    <div *ngIf="otherGroups.length !== 0">
+    </ng-template>
+    <ng-template #creatorElseBlock>
       <ion-row>
         <ion-col>
-          <h2>Von anderen erstellte Gruppen</h2>
+          <ion-card>
+            <ion-card-content class="ion-text-center">
+              <p>Keine von dir erstellten Gruppen</p>
+            </ion-card-content>
+          </ion-card>
         </ion-col>
       </ion-row>
-      <div *ngFor="let item of otherGroups">
+    </ng-template>
+
+
+    <ion-row>
+      <ion-col>
+        <h2>Von anderen erstellte Gruppen</h2>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="otherGroups.length !== 0; then otherThenBlock else otherElseBlock"></div>
+      <ng-template #otherThenBlock>
+        <div *ngFor="let item of otherGroups">
+          <ion-row>
+            <ion-col>
+              <ion-card class="ion-activatable ripple-parent">
+                <ion-card-content (click)="detailView(item)">
+                  <h2>{{ item.group_name }}</h2>
+                </ion-card-content>
+                <ion-ripple-effect></ion-ripple-effect>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ng-template>
+      <ng-template #otherElseBlock>
         <ion-row>
           <ion-col>
-            <ion-card class="ion-activatable ripple-parent">
-              <ion-card-content (click)="detailView(item)">
-                <h2>{{ item.group_name }}</h2>
+            <ion-card>
+              <ion-card-content class="ion-text-center">
+                <p>Keine von anderen erstellten Gruppen</p>
               </ion-card-content>
-              <ion-ripple-effect></ion-ripple-effect>
             </ion-card>
           </ion-col>
         </ion-row>
-      </div>
-    </div>
+      </ng-template>
+
 
     <div *ngIf="invitations.length !== 0">
       <ion-row>
@@ -57,8 +84,8 @@
                     <h2>{{ item.group_name }}</h2>
                   </ion-col>
                   <ion-col class="ion-text-end">
-                    <ion-icon color="success" name="checkmark-sharp" (click)="acceptInvite(item.group_id)"></ion-icon>
-                    <ion-icon color="danger" name="close-sharp" (click)="declineInvite(item.group_id)"></ion-icon>
+                    <ion-icon color="success" name="checkmark-sharp" (click)="acceptInvite(item)"></ion-icon>
+                    <ion-icon color="danger" name="close-sharp" (click)="declineInvite(item)"></ion-icon>
                   </ion-col>
                 </ion-row>
               </ion-card-content>
@@ -67,6 +94,7 @@
         </ion-row>
       </div>
     </div>
+
   </ion-grid>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

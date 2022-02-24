@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderService } from '../../../services/api/order.service';
 import { Storage } from '@capacitor/storage';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-order-detail',
@@ -16,7 +17,8 @@ export class OrderDetailPage implements OnInit {
 
   constructor(
     private router: Router,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private alert: AlertService
   ) { }
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class OrderDetailPage implements OnInit {
         data => {
           this.router.navigate(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
         },
-        error => console.log(error)
+        error => this.alert.presentSimpleAlert('Fülle bitte alle Preiseingaben aus!')
       );
   }
 
@@ -58,10 +60,7 @@ export class OrderDetailPage implements OnInit {
     order.debt_amount = amount.replace(/,/g, '.');
 
     this.orderService.updatePrice(accessToken.value, order.order_id, order.debt_amount)
-      .subscribe(
-        data => console.log(data),
-        error => console.log(error)
-      );
+      .subscribe();
   }
 
 }

@@ -54,22 +54,23 @@ export class Tab2Page {
       );
   }
 
-  async acceptInvite(groupId) {
+  async acceptInvite(group) {
     const accessToken = await Storage.get({ key: 'access_token' });
 
-    this.groupService.acceptInvitation(accessToken.value, groupId)
+    this.groupService.acceptInvitation(accessToken.value, group.group_id)
       .subscribe(
         () => this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2'])),
         error => console.log(error)
       );
   }
 
-  async declineInvite(groupId) {
+  async declineInvite(group) {
     const accessToken = await Storage.get({ key: 'access_token' });
 
-    this.groupService.declineInvitation(accessToken.value, groupId)
+    this.groupService.declineInvitation(accessToken.value, group.group_id)
       .subscribe(
-        () => this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2'])),
+        () => this.invitations = this.invitations.filter(elem => elem !== group),
+        //this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2'])),
         error => console.log(error)
       );
   }

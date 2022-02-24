@@ -64,7 +64,7 @@
                       </ion-row>
                     </ion-col>
                     <ion-col class="ion-text-end">
-                      <ion-icon name="pencil-sharp"></ion-icon>
+                      <ion-icon name="ellipsis-horizontal-sharp"></ion-icon>
                     </ion-col>
                   </ion-row>
                 </ion-card-content>
@@ -84,7 +84,7 @@
                       </ion-row>
                     </ion-col>
                     <ion-col class="ion-text-end">
-                      <ion-icon (click)="removeUser(user)" color="danger" name="person-remove"></ion-icon>
+                      <ion-icon (click)="removeUser(user)" name="ellipsis-horizontal-sharp"></ion-icon>
                     </ion-col>
                   </ion-row>
                 </ion-card-content>
@@ -97,7 +97,12 @@
                 <ion-row>
                   <ion-col>
                     <ion-row>
-                      <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+                      <div *ngIf="user.user_id === myUser.user_id; else elseBlock">
+                        <b>{{ user.firstname }} {{ user.lastname }}</b>
+                      </div>
+                      <ng-template #elseBlock>
+                        <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+                      </ng-template>
                     </ion-row>
                     <ion-row>
                       <span>{{ toTitleCase(user.role_type) }}</span>

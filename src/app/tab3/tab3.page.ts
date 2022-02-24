@@ -65,7 +65,8 @@ export class Tab3Page {
             this.debtSerivce.removeDebtor(accessToken.value, item.debtor.user_id)
               .subscribe(
                 // bypass load bug
-                () => this.router.navigate(['/tabs/tab1']).then(() => this.router.navigate(['tabs/tab3']))
+                () => this.debtors = this.debtors.filter(elem => elem !== item)
+                //this.router.navigate(['/tabs/tab1']).then(() => this.router.navigate(['tabs/tab3']))
               );
           }
         }
