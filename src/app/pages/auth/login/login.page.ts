@@ -131,7 +131,7 @@ export class LoginPage implements OnInit {
           this.router.navigate(['/tabs/tab1']);
         },
         error => {
-          OneSignal.removeExternalUserId();
+          this.platform.ready().then(() => OneSignal.removeExternalUserId());
 
           this.loading.dismissLoading();
 
