@@ -98,6 +98,10 @@ export class Tab1Page {
     this.router.navigate(['order-with'], navExtras);
   }
 
+  createOrder() {
+    this.router.navigate(['/create-order']);
+  }
+
   async detailView(myInitialOrderData) {
     const accessToken = await Storage.get({ key: 'access_token' });
 

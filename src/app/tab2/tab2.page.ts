@@ -85,6 +85,10 @@ export class Tab2Page {
     await alert.present();
   }
 
+  createGroup() {
+    this.router.navigate(['/create-group']);
+  }
+
   async detailView(group) {
 
     const accessToken = await Storage.get({ key: 'access_token' });

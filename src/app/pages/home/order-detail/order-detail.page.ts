@@ -51,19 +51,19 @@ export class OrderDetailPage implements OnInit {
 
     this.orderService.finishOrder(accessToken.value, orderId)
       .subscribe(
-        data => {
-          this.router.navigate(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
-        },
+        data => this.getBack(),
         error => this.alert.presentSimpleAlert('Fülle bitte alle Preiseingaben aus!')
       );
   }
 
   async updatePrice(order, amount) {
+
     if (amount !== '') {
       const accessToken = await Storage.get({ key: 'access_token' });
 
       order.debt_amount = amount.replace(/,/g, '.');
       order.debt_amount = Number(order.debt_amount).toFixed(2);
+
 
       if (order.debt_amount > 0 && order.debt_amount <= 100) {
         this.orderService.updatePrice(accessToken.value, order.order_id, order.debt_amount)
@@ -71,9 +71,11 @@ export class OrderDetailPage implements OnInit {
       }
       else {
         order.debt_amount = '';
-        this.alert.presentSimpleAlert('Ungültiger Preiswert (der Betrag darf maximal 100€ sein)');
+
+        this.alert.presentSimpleAlert('Ungültiger Preiswert! Maximum liegt bei 100€!');
       }
     }
+
   }
 
 }

@@ -32,7 +32,7 @@
             <ion-modal trigger="open-modal">
               <ng-template>
                 <ion-content force-overscroll="false">
-                  <ion-datetime locale="de-DE" #datetime presentation="time" [hourValues]="hours" minuteValues="0,15,30,45" [value]="deadline" (ionChange)="dateChanged(datetime.value)" doneText="OK" cancelText="Abbrechen" showDefaultButtons="true"></ion-datetime>
+                  <ion-datetime [value]="deadline" locale="de-DE" presentation="time" [min]="minRoundedTime" minuteValues="0,15,30,45" #datetime  (ionChange)="dateChanged(datetime.value)" doneText="OK" cancelText="Abbrechen" showDefaultButtons="true"></ion-datetime>
                 </ion-content>
               </ng-template>
             </ion-modal>

@@ -25,7 +25,7 @@ export class CreateOrderPage implements OnInit {
   deadline;
   hours = [];
 
-  currentDatetime = new Date().toISOString();
+  minRoundedTime;
 
   constructor(
     private groupService: GroupService,
@@ -37,13 +37,11 @@ export class CreateOrderPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.deadline = new Date();
-    this.deadline.setHours(this.deadline.getHours() + 1);
-    this.deadline = this.deadline.toISOString();
+    const currentDatetime = new Date();
+    currentDatetime.setHours(currentDatetime.getHours() + 1);
 
-    for (let index = new Date().getHours(); index <= 24; index++) {
-      this.hours.push(index.toString());
-    }
+    this.deadline = new Date(Math.ceil(currentDatetime.getTime() / 900000) * 900000);
+    this.minRoundedTime = new Date(Math.ceil(currentDatetime.getTime() / 900000) * 900000).toISOString();
   }
 
   ionViewWillEnter() {
@@ -78,8 +76,8 @@ export class CreateOrderPage implements OnInit {
   }
 
   dateChanged(value) {
-    this.deadline = value;
-    this.formattedDatetime = format(parseISO(value), 'dd MMM yyyy, HH:mm');
+    this.deadline = value.substring(0, 19) + '+01:00';
+    this.formattedDatetime = format(parseISO(this.deadline), 'dd MMM yyyy, HH:mm');
   }
 
   async start() {
