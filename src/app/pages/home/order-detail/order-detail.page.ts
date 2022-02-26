@@ -41,8 +41,6 @@ export class OrderDetailPage implements OnInit {
 
   async finish(orderId) {
 
-    // warning if you want to check as finished
-
     const accessToken = await Storage.get({ key: 'access_token' });
 
     this.orderService.finishOrder(accessToken.value, orderId)
@@ -60,8 +58,15 @@ export class OrderDetailPage implements OnInit {
     order.debt_amount = amount.replace(/,/g, '.');
     order.debt_amount = Number(order.debt_amount).toFixed(2);
 
-    this.orderService.updatePrice(accessToken.value, order.order_id, order.debt_amount)
-      .subscribe();
+    if (order.debt_amount > 0 && order.debt_amount < 10000) {
+      this.orderService.updatePrice(accessToken.value, order.order_id, order.debt_amount)
+      .subscribe(
+      );
+    }
+    else {
+      order.debt_amount = '';
+      this.alert.presentSimpleAlert('Ungültiger Preiswert');
+    }
   }
 
 }

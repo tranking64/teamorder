@@ -88,6 +88,9 @@ export class OrderService {
       .set('Content-Type', 'application/json')
       .set('Authorization', accessToken);
 
+    console.log(orderId);
+    console.log(priceDebt);
+
     // eslint-disable-next-line @typescript-eslint/naming-convention
     return this.http.put('https://diplom2021.itkaufmann.cloud/api/orders/update/price', {order_id: orderId, price: priceDebt}, {headers});
   }

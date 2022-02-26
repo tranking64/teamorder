@@ -43,17 +43,16 @@ export class Tab4Page {
                 await Storage.remove({ key: 'refresh_token' });
 
                 this.router.navigate(['/login']);
-              },
-              async error => {
-                await Storage.remove({ key: 'access_token' });
-                await Storage.remove({ key: 'refresh_token' });
-
-                this.router.navigate(['/login']);
               }
           );
         },
-        error => {
+        async error => {
           this.alert.presentSimpleAlert(error.error.message);
+
+          await Storage.remove({ key: 'access_token' });
+          await Storage.remove({ key: 'refresh_token' });
+
+          this.router.navigate(['/login']);
         }
       );
   }
