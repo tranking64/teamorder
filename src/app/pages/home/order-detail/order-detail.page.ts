@@ -33,17 +33,6 @@ export class OrderDetailPage implements OnInit {
     this.navCtrl.navigateBack(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
   }
 
-  createDate(data) {
-    const newDate = new Date();
-    newDate.setMonth(data.substring(5, 7)-1);
-    newDate.setDate(data.substring(8, 10));
-    newDate.setHours(data.substring(11, 13));
-    newDate.setMinutes(data.substring(14, 16));
-    newDate.setSeconds(0);
-
-    return newDate;
-  }
-
   checkDeadline(cDeadline): boolean {
     const deadline = new Date();
 
@@ -70,18 +59,20 @@ export class OrderDetailPage implements OnInit {
   }
 
   async updatePrice(order, amount) {
-    const accessToken = await Storage.get({ key: 'access_token' });
+    if (amount !== '') {
+      const accessToken = await Storage.get({ key: 'access_token' });
 
-    order.debt_amount = amount.replace(/,/g, '.');
-    order.debt_amount = Number(order.debt_amount).toFixed(2);
+      order.debt_amount = amount.replace(/,/g, '.');
+      order.debt_amount = Number(order.debt_amount).toFixed(2);
 
-    if (order.debt_amount > 0 && order.debt_amount <= 100) {
-      this.orderService.updatePrice(accessToken.value, order.order_id, order.debt_amount)
-        .subscribe();
-    }
-    else {
-      order.debt_amount = '';
-      this.alert.presentSimpleAlert('Ungültiger Preiswert (der Betrag darf maximal 100€ sein)');
+      if (order.debt_amount > 0 && order.debt_amount <= 100) {
+        this.orderService.updatePrice(accessToken.value, order.order_id, order.debt_amount)
+          .subscribe();
+      }
+      else {
+        order.debt_amount = '';
+        this.alert.presentSimpleAlert('Ungültiger Preiswert (der Betrag darf maximal 100€ sein)');
+      }
     }
   }
 

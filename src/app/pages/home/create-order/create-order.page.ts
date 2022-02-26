@@ -25,6 +25,8 @@ export class CreateOrderPage implements OnInit {
   deadline;
   hours = [];
 
+  currentDatetime = new Date().toISOString();
+
   constructor(
     private groupService: GroupService,
     private orderService: OrderService,

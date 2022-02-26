@@ -75,9 +75,9 @@ export class LoginPage implements OnInit {
             await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
             await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
 
-            this.platform.ready().then(() => this.oneSignalInit());
-
             this.loading.dismissLoading();
+
+            this.platform.ready().then(() => this.oneSignalInit());
 
             this.router.navigate(['/tabs/tab1']);
           },
@@ -86,9 +86,9 @@ export class LoginPage implements OnInit {
             await Storage.remove({ key: 'access_token' });
             await Storage.remove({ key: 'refresh_token' });
 
-            OneSignal.removeExternalUserId();
-
             this.loading.dismissLoading();
+
+            this.platform.ready().then(() => OneSignal.removeExternalUserId());
           }
         );
     }
@@ -120,16 +120,16 @@ export class LoginPage implements OnInit {
           await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
           await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
 
-          this.platform.ready().then(() => this.oneSignalInit());
-
           this.loading.dismissLoading();
+
+          this.platform.ready().then(() => this.oneSignalInit());
 
           this.router.navigate(['/tabs/tab1']);
         },
         error => {
-          this.platform.ready().then(() => OneSignal.removeExternalUserId());
-
           this.loading.dismissLoading();
+
+          this.platform.ready().then(() => OneSignal.removeExternalUserId());
 
           const errorCode = error.status;
           const errorDetail = error.error.status;

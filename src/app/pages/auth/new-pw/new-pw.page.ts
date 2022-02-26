@@ -13,9 +13,9 @@ import { NavController } from '@ionic/angular';
 })
 export class NewPwPage implements OnInit {
 
-  code: string;
-  password: string;
-  cPassword: string;
+  code;
+  password;
+  cPassword;
 
   constructor(
     private auth: AuthService,
@@ -35,6 +35,9 @@ export class NewPwPage implements OnInit {
   resetPassword() {
     if(this.password !== this.cPassword) {
       this.alert.presentSimpleAlert('Neue Passwörter stimmen nicht überrein!');
+    }
+    else if (this.password.length < 8 && this.cPassword.length < 8) {
+      this.alert.presentSimpleAlert('Passwörter müssen mindestens 8 Zeichen haben!');
     }
     else {
       this.loading.presentLoading();

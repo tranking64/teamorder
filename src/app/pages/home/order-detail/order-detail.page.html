@@ -53,10 +53,10 @@
                   <ion-col size="5" class="ion-align-self-center">
                     <div *ngIf="item.debt_amount !== null; then thenBlock else elseBlock"></div>
                     <ng-template #thenBlock>
-                      <ion-input inputmode="decimal" class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€" value="{{ item.debt_amount }}"></ion-input>
+                      <ion-input [disabled]="checkDeadline(initialOrderData.deadline)" inputmode="decimal" class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€" value="{{ item.debt_amount }}"></ion-input>
                     </ng-template>
                     <ng-template #elseBlock>
-                      <ion-input inputmode="decimal" class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€"></ion-input>
+                      <ion-input [disabled]="checkDeadline(initialOrderData.deadline)" inputmode="decimal" class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€"></ion-input>
                     </ng-template>
                   </ion-col>
                 </ion-row>
