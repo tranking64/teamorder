@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { DebtService } from '../services/api/debt.service';
 import { Storage } from '@capacitor/storage';
 import { AlertController } from '@ionic/angular';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab3',
@@ -16,26 +15,21 @@ export class Tab3Page {
 
   constructor(
     private debtSerivce: DebtService,
-    private alertCtrl: AlertController,
-    private router: Router
+    private alertCtrl: AlertController
   ) {}
 
   ionViewWillEnter() {
-    this.getCreditors();
-    this.getDebtors();
+    this.getInitialData();
   }
 
-  async getDebtors() {
+  async getInitialData() {
+
     const accessToken = await Storage.get({ key: 'access_token' });
 
     this.debtSerivce.getDebtors(accessToken.value)
       .subscribe(
         data => this.debtors = data.data
       );
-  }
-
-  async getCreditors() {
-    const accessToken = await Storage.get({ key: 'access_token' });
 
     this.debtSerivce.getCreditors(accessToken.value)
       .subscribe(
@@ -48,13 +42,12 @@ export class Tab3Page {
     const accessToken = await Storage.get({ key: 'access_token' });
 
     const alert = await this.alertCtrl.create({
-      header: 'Warnung',
-      message: 'Du bestätigst hiermit, dass der User die Schulden beglichen hat!',
+      header: 'Achtung',
+      message: 'Du bestätigst hiermit, dass dieser User seine Schulden beglichen hat!',
       buttons: [
         {
           text: 'Abbrechen',
           role: 'cancel',
-          //cssClass: 'secondary',
           id: 'cancel-button',
           handler: () => {
           }
@@ -64,9 +57,7 @@ export class Tab3Page {
           handler: () => {
             this.debtSerivce.removeDebtor(accessToken.value, item.debtor.user_id)
               .subscribe(
-                // bypass load bug
                 () => this.debtors = this.debtors.filter(elem => elem !== item)
-                //this.router.navigate(['/tabs/tab1']).then(() => this.router.navigate(['tabs/tab3']))
               );
           }
         }
@@ -74,10 +65,6 @@ export class Tab3Page {
     });
 
     await alert.present();
-  }
-
-  paid(item) {
-    this.presentAlert(item);
   }
 
 }

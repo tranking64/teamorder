@@ -58,6 +58,7 @@ export class OrderDetailPage implements OnInit {
     const accessToken = await Storage.get({ key: 'access_token' });
 
     order.debt_amount = amount.replace(/,/g, '.');
+    order.debt_amount = Number(order.debt_amount).toFixed(2);
 
     this.orderService.updatePrice(accessToken.value, order.order_id, order.debt_amount)
       .subscribe();

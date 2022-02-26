@@ -56,19 +56,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/group/edit-group/edit-group.module').then( m => m.EditGroupPageModule)
   },
   {
-    path: 'edit-group-user',
-    loadChildren: () => import('./pages/group/edit-group-user/edit-group-user.module').then( m => m.EditGroupUserPageModule)
-  },
-  {
     path: 'invite-person',
     loadChildren: () => import('./pages/group/invite-person/invite-person.module').then( m => m.InvitePersonPageModule)
-  },  {
-    path: 'create-order',
-    loadChildren: () => import('./pages/home/create-order/create-order.module').then( m => m.CreateOrderPageModule)
   },
   {
-    path: 'manage-user',
-    loadChildren: () => import('./pages/group/manage-user/manage-user.module').then( m => m.ManageUserPageModule)
+    path: 'create-order',
+    loadChildren: () => import('./pages/home/create-order/create-order.module').then( m => m.CreateOrderPageModule)
   },
   {
     path: 'order-with',
@@ -80,6 +73,7 @@ const routes: Routes = [
   },
   {
     path: 'with-orderings-detail',
+    // eslint-disable-next-line max-len
     loadChildren: () => import('./pages/home/with-orderings-detail/with-orderings-detail.module').then( m => m.WithOrderingsDetailPageModule)
   }
 

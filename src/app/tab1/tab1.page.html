@@ -1,22 +1,24 @@
 <ion-content forceOverscroll="false">
 
   <ion-grid>
+
     <ion-row>
       <ion-col>
-        <h2>Erstellte Bestellungen</h2>
+        <h2>Von dir gestartete Bestellungen</h2>
       </ion-col>
     </ion-row>
     <div *ngIf="myInitialOrders.length !== 0; then thenBlock else elseBlock"></div>
+
     <ng-template #thenBlock>
       <div *ngFor="let item of myInitialOrders">
         <ion-row>
           <ion-col>
-            <ion-card class="ion-activatable ripple-parent" (click)="detailView(item)">
+            <ion-card class="ion-activatable ripple-parent ion-no-margin" (click)="detailView(item)">
               <ion-card-content>
                 <ion-row>
                   <ion-col>
                     <h2>{{ item.group_name }}</h2>
-                    <p>Bestellort: {{ item.place }}</p>
+                    <p>{{ item.place }}</p>
                   </ion-col>
                 </ion-row>
               </ion-card-content>
@@ -26,10 +28,11 @@
         </ion-row>
       </div>
     </ng-template>
+
     <ng-template #elseBlock>
       <ion-row>
         <ion-col>
-          <ion-card>
+          <ion-card class="ion-no-margin">
             <ion-card-content class="ion-text-center">
               <p>Aktuell keine</p>
             </ion-card-content>
@@ -44,18 +47,19 @@
       </ion-col>
     </ion-row>
     <div *ngIf="otherRunningOrders.length !== 0; then runningThenBlock else runningElseBlock"></div>
+
     <ng-template #runningThenBlock>
       <div *ngFor="let item of otherRunningOrders">
         <ion-row>
           <ion-col>
-            <ion-card class="ion-activatable ripple-parent" (click)="orderWith(item)">
+            <ion-card class="ion-activatable ripple-parent ion-no-margin" (click)="orderWith(item)">
               <ion-card-content>
                 <ion-row>
-                  <ion-col>
+                  <ion-col size="9">
                     <h2>{{ item.group_name }}</h2>
-                    <p>Bestellort: {{ item.place }}</p>
+                    <p>{{ item.place }}</p>
                   </ion-col>
-                  <ion-col style="color: red;" class="ion-text-end">
+                  <ion-col class="ion-text-end ion-align-self-center deadline-text">
                     bis {{ item.deadline.substring(11, item.deadline.length-3) }}
                   </ion-col>
                 </ion-row>
@@ -66,10 +70,11 @@
         </ion-row>
       </div>
     </ng-template>
+
     <ng-template #runningElseBlock>
       <ion-row>
         <ion-col>
-          <ion-card>
+          <ion-card class="ion-no-margin">
             <ion-card-content class="ion-text-center">
               <p>Aktuell keine</p>
             </ion-card-content>
@@ -80,22 +85,23 @@
 
     <ion-row>
       <ion-col>
-        <h2>Laufende Mitbestellungen</h2>
+        <h2>Deine Mitbestellungen</h2>
       </ion-col>
     </ion-row>
     <div *ngIf="currentWithOrderings.length !== 0; then orderingsThenBlock else orderingsElseBlock"></div>
+
     <ng-template #orderingsThenBlock>
       <div *ngFor="let item of currentWithOrderings">
         <ion-row>
           <ion-col>
-            <ion-card class="ion-activatable ripple-parent" (click)="orderingData(item)">
+            <ion-card class="ion-activatable ripple-parent ion-no-margin" (click)="orderingData(item)">
               <ion-card-content>
                 <ion-row>
-                  <ion-col>
+                  <ion-col size="9">
                     <h2>{{ item.group_name }}</h2>
-                    <p>Bestellort: {{ item.place }}</p>
+                    <p>{{ item.place }}</p>
                   </ion-col>
-                  <ion-col class="ion-text-end">
+                  <ion-col class="ion-text-end ion-align-self-center">
                     Anzahl: {{ item.order_count }}
                   </ion-col>
                 </ion-row>
@@ -106,10 +112,11 @@
         </ion-row>
       </div>
     </ng-template>
+
     <ng-template #orderingsElseBlock>
       <ion-row>
         <ion-col>
-          <ion-card>
+          <ion-card class="ion-no-margin">
             <ion-card-content class="ion-text-center">
               <p>Aktuell keine</p>
             </ion-card-content>
@@ -125,4 +132,5 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
 </ion-content>

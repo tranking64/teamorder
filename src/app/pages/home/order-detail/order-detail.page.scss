@@ -1,20 +1,14 @@
-ion-grid {
-  margin-top: 30px;
-  width: 95%;
+.ios ion-grid {
+  margin-top: 50px;
+}
+
+.md ion-grid {
+  margin-top: 20px;
 }
 
 ion-icon {
   margin-top: 10px;
   font-size: 30px;
-}
-
-ion-button {
-  width: 100%;
-  font-size: 14px;
-}
-
-ion-card {
-  margin: 0;
 }
 
 ion-input {

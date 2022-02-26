@@ -5,6 +5,7 @@ import { SettingsService } from '../../../services/api/settings.service';
 import { AlertService } from '../../../services/alert.service';
 import { LoadingService } from '../../../services/loading.service';
 import { ToastService } from '../../../services/toast.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-change-pw',
@@ -22,9 +23,14 @@ export class ChangePwPage implements OnInit {
     private router: Router,
     private alert: AlertService,
     private loading: LoadingService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private navCtrl: NavController) { }
 
   ngOnInit() {
+  }
+
+  getBack() {
+    this.navCtrl.back();
   }
 
   async change() {

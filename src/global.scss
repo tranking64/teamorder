@@ -25,9 +25,22 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-// general
-
 ion-content {
+  font-size: 14px;
+}
+
+.ios ion-grid {
+  margin-top: 30px;
+}
+
+ion-grid {
+  width: 95%;
+}
+
+ion-button {
+  height: 40px;
+  width: 100%;
+  --border-radius: 5px;
   font-size: 14px;
 }
 
@@ -55,13 +68,6 @@ ion-content {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-
-    ion-button {
-      height: 40px;
-      width: 100%;
-      --border-radius: 5px;
-      font-size: 14px;
-    }
 
     ion-input, ion-textarea {
       text-align: start;
@@ -136,10 +142,3 @@ ion-modal {
 ion-modal ion-datetime {
   height: 382px;
 }
-
-// light theme
-
-
-// dark theme
-
-

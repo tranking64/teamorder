@@ -8,9 +8,7 @@ export class LoadingService {
 
   loading;
 
-  constructor(private loadingCtrl: LoadingController) {
-
-  }
+  constructor(private loadingCtrl: LoadingController) {}
 
   async presentLoading() {
     this.loading = await this.loadingCtrl.create({

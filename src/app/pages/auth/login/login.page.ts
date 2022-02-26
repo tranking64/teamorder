@@ -43,14 +43,6 @@ export class LoginPage implements OnInit {
           else {
             OneSignal.setLanguage('en');
           }
-
-          /*OneSignal.setNotificationOpenedHandler(jsonData => {
-            console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
-          });
-
-          OneSignal.promptForPushNotificationsWithUserResponse(accepted => {
-              console.log('User accepted notifications: ' + accepted);
-          });*/
         }
       );
   }
@@ -84,8 +76,6 @@ export class LoginPage implements OnInit {
             await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
             await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
 
-            console.log('refresh works');
-
             this.platform.ready().then(() => this.oneSignalInit());
 
             this.loading.dismissLoading();
@@ -100,7 +90,6 @@ export class LoginPage implements OnInit {
             OneSignal.removeExternalUserId();
 
             this.loading.dismissLoading();
-            console.log(error);
           }
         );
     }
@@ -128,7 +117,7 @@ export class LoginPage implements OnInit {
       this.loading.presentLoading();
 
       this.auth.login(this.email, this.password).subscribe(
-        async (data) => {
+        async data => {
           // store tokens in local database
           await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
           await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
@@ -141,7 +130,7 @@ export class LoginPage implements OnInit {
 
           this.router.navigate(['/tabs/tab1']);
         },
-        (error) => {
+        error => {
           OneSignal.removeExternalUserId();
 
           this.loading.dismissLoading();

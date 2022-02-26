@@ -1,49 +1,91 @@
 <ion-content forceOverscroll="false">
+
   <ion-grid>
-    <h2>Konto</h2>
-    <ion-row class="box" (click)="navigateTo('update-user')">
+
+    <ion-row>
       <ion-col>
-        <span>Daten ändern</span>
-      </ion-col>
-      <ion-col class="ion-text-end">
-        <ion-icon name="chevron-forward-sharp"></ion-icon>
+        <h2>Konto</h2>
       </ion-col>
     </ion-row>
-    <ion-row class="box" (click)="navigateTo('change-pw')">
+
+    <ion-row>
       <ion-col>
-        <span>Passwort ändern</span>
-      </ion-col>
-      <ion-col class="ion-text-end">
-        <ion-icon name="chevron-forward-sharp"></ion-icon>
+        <ion-card class="ion-activatable ripple-parent ion-no-margin" (click)="navigateTo('update-user')">
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="10">
+                Daten ändern
+              </ion-col>
+              <ion-col class="ion-text-end">
+                <ion-icon name="chevron-forward-sharp"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+          <ion-ripple-effect></ion-ripple-effect>
+        </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row class="box" (click)="navigateTo('delete-acc')">
+
+    <ion-row>
       <ion-col>
-        <span>Konto löschen</span>
-      </ion-col>
-      <ion-col class="ion-text-end">
-        <ion-icon name="chevron-forward-sharp"></ion-icon>
+        <ion-card class="ion-activatable ripple-parent ion-no-margin" (click)="navigateTo('change-pw')">
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="10">
+                Passwort ändern
+              </ion-col>
+              <ion-col class="ion-text-end">
+                <ion-icon name="chevron-forward-sharp"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+          <ion-ripple-effect></ion-ripple-effect>
+        </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row class="box" (click)="navigateTo('personal-data')">
+
+    <ion-row>
       <ion-col>
-        <span>Kontodaten anfordern</span>
-      </ion-col>
-      <ion-col class="ion-text-end">
-        <ion-icon name="chevron-forward-sharp"></ion-icon>
+        <ion-card class="ion-activatable ripple-parent ion-no-margin" (click)="navigateTo('delete-acc')">
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="10">
+                Konto löschen
+              </ion-col>
+              <ion-col class="ion-text-end">
+                <ion-icon name="chevron-forward-sharp"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+          <ion-ripple-effect></ion-ripple-effect>
+        </ion-card>
       </ion-col>
     </ion-row>
-    <h2>Allgemein</h2>
-    <ion-row class="switch-box">
+
+    <ion-row>
       <ion-col>
-        <span>Dunkler Modus</span>
-      </ion-col>
-      <ion-col id="switch" class="ion-text-end">
-        <ion-toggle color="primary"></ion-toggle>
+        <ion-card class="ion-activatable ripple-parent ion-no-margin" (click)="navigateTo('personal-data')">
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="10">
+                Kontodaten anfordern
+              </ion-col>
+              <ion-col class="ion-text-end">
+                <ion-icon name="chevron-forward-sharp"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+          <ion-ripple-effect></ion-ripple-effect>
+        </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row id="button">
-      <ion-button (click)="logout()">Abmelden</ion-button>
+
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="logout()">Abmelden</ion-button>
+      </ion-col>
     </ion-row>
+
   </ion-grid>
+
 </ion-content>

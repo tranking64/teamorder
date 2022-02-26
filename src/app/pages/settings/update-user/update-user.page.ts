@@ -7,6 +7,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { EnumerationDataService } from 'src/app/services/api/enumeration-data.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-update-user',
@@ -33,13 +34,16 @@ export class UpdateUserPage implements OnInit {
     private loading: LoadingService,
     private enumData: EnumerationDataService,
     private alert: AlertService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private navCtrl: NavController) { }
 
   ionViewWillEnter() {
     this.loading.presentLoading();
-    this.getUserData();
-    this.getCountries();
-    this.getGenders();
+    this.getInitialData();
+  }
+
+  getBack() {
+    this.navCtrl.back();
   }
 
   toTitleCase = (phrase) =>
@@ -50,8 +54,16 @@ export class UpdateUserPage implements OnInit {
     .join(' ');
 
   // set current user data, for form
-  async getUserData() {
+  async getInitialData() {
     const accessToken = await Storage.get({ key: 'access_token' });
+
+    this.enumData.fetchCountries().subscribe(
+      data => this.countries = data.data
+    );
+
+    this.enumData.fetchGenders().subscribe(
+      (data) => this.genders = data.data
+    );
 
     this.settings.getCurrUserData(accessToken.value)
       .subscribe(
@@ -105,9 +117,8 @@ export class UpdateUserPage implements OnInit {
         },
         error => {
           this.loading.dismissLoading();
-          const errorCode = error.status;
 
-          if (errorCode === 400) {
+          if (error.status === 400) {
             this.alert.presentSimpleAlert('Fülle bitte alle Eingabefelder aus!');
           }
           else {
@@ -117,13 +128,5 @@ export class UpdateUserPage implements OnInit {
       );
     }
   }
-
-  getCountries = () => this.enumData.fetchCountries().subscribe(
-    (data) => this.countries = data.data
-  );
-
-  getGenders = () => this.enumData.fetchGenders().subscribe(
-    (data) => this.genders = data.data
-  );
 
 }

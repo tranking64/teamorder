@@ -91,4 +91,12 @@ export class OrderService {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     return this.http.put('https://diplom2021.itkaufmann.cloud/api/orders/update/price', {order_id: orderId, price: priceDebt}, {headers});
   }
+
+  removeWithOrder(accessToken, orderId): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', accessToken);
+
+    return this.http.request('delete', 'https://diplom2021.itkaufmann.cloud/api/orders/delete/' + orderId, {headers});
+  }
 }

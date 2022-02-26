@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/api/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoadingService } from 'src/app/services/loading.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-forgot-pw',
@@ -17,9 +18,14 @@ export class ForgotPwPage implements OnInit {
     private auth: AuthService,
     private router: Router,
     private alert: AlertService,
-    private loading: LoadingService) { }
+    private loading: LoadingService,
+    private navCtrl: NavController) { }
 
   ngOnInit() {
+  }
+
+  getBack() {
+    this.navCtrl.navigateBack('/login');
   }
 
   sendLink() {
@@ -27,11 +33,11 @@ export class ForgotPwPage implements OnInit {
 
     this.auth.forgotPasswort(this.email)
     .subscribe(
-      (data) => {
+      data => {
         this.loading.dismissLoading();
         this.router.navigate(['/new-pw']);
       },
-      (error) => {
+      error => {
         this.loading.dismissLoading();
 
         if (error.status === 400 || 404) {

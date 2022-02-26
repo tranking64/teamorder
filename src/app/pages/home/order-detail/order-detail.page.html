@@ -41,20 +41,20 @@
       <div *ngFor="let item of orders">
         <ion-row>
           <ion-col>
-            <ion-card>
+            <ion-card class="ion-no-margin">
               <ion-card-content>
                 <ion-row>
-                  <ion-col>
+                  <ion-col class="ion-align-self-center">
                     <h2>{{ item.username }}</h2>
                     <p>{{ item.order_content }}</p>
                   </ion-col>
-                  <ion-col>
+                  <ion-col size="5" class="ion-align-self-center">
                     <div *ngIf="item.debt_amount !== null; then thenBlock else elseBlock"></div>
                     <ng-template #thenBlock>
-                      <ion-input class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€" value="{{ item.debt_amount }}"></ion-input>
+                      <ion-input inputmode="decimal" class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€" value="{{ item.debt_amount }}"></ion-input>
                     </ng-template>
                     <ng-template #elseBlock>
-                      <ion-input class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€"></ion-input>
+                      <ion-input inputmode="decimal" class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€"></ion-input>
                     </ng-template>
                   </ion-col>
                 </ion-row>
@@ -67,7 +67,7 @@
     <ng-template #elseBlock>
       <ion-row>
         <ion-col>
-          <ion-card>
+          <ion-card class="ion-no-margin">
             <ion-card-content class="ion-text-center">
               <p>Aktuell keine Mitbestellungen</p>
             </ion-card-content>
@@ -81,7 +81,7 @@
     <ion-row>
       <ion-col>
         <ion-button [disabled]="checkDeadline(initialOrderData.deadline)" (click)="finish(initialOrderData.initial_order_id)">
-          Durchgeführt
+          Als "erledigt" markieren
         </ion-button>
       </ion-col>
     </ion-row>

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { GroupService } from '../services/api/group.service';
 import { Storage } from '@capacitor/storage';
 import { NavigationExtras, Router } from '@angular/router';
+import { SettingsService } from '../services/api/settings.service';
 
 @Component({
   selector: 'app-tab2',
@@ -16,37 +17,26 @@ export class Tab2Page {
 
   constructor(
     private groupService: GroupService,
-    private router: Router
+    private router: Router,
+    private settings: SettingsService,
     ) { }
 
   ionViewWillEnter() {
-    this.getCreatorGroups();
-    this.getOtherGroups();
-    this.getInvitations();
+    this.getInitialData();
   }
 
-  async getCreatorGroups() {
+  async getInitialData() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
     this.groupService.getCreatorGroups(accessToken.value)
       .subscribe(
-        data => this.creatorGroups = data.data,
-        error => console.log(error)
+        data => this.creatorGroups = data.data
       );
-  }
-
-  async getOtherGroups() {
-    const accessToken = await Storage.get({ key: 'access_token' });
 
     this.groupService.getOtherGroups(accessToken.value)
       .subscribe(
-        data => this.otherGroups = data.data,
-        error => console.log(error)
+        data => this.otherGroups = data.data
       );
-  }
-
-  async getInvitations() {
-    const accessToken = await Storage.get({ key: 'access_token' });
 
     this.groupService.getInvitations(accessToken.value)
       .subscribe(
@@ -59,8 +49,7 @@ export class Tab2Page {
 
     this.groupService.acceptInvitation(accessToken.value, group.group_id)
       .subscribe(
-        () => this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2'])),
-        error => console.log(error)
+        () => this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2']))
       );
   }
 
@@ -69,18 +58,41 @@ export class Tab2Page {
 
     this.groupService.declineInvitation(accessToken.value, group.group_id)
       .subscribe(
-        () => this.invitations = this.invitations.filter(elem => elem !== group),
-        //this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2'])),
-        error => console.log(error)
+        () => this.invitations = this.invitations.filter(elem => elem !== group)
       );
   }
 
-  detailView(group) {
-    const navExtras: NavigationExtras = {
-      state: group
-    };
+  async detailView(group) {
 
-    this.router.navigate(['detail-group-page'], navExtras);
+    const accessToken = await Storage.get({ key: 'access_token' });
+
+    this.groupService.getSpecificGroup(accessToken.value, group.group_id)
+      .subscribe(
+        data => this.getMyUser(accessToken, data.data.users, group)
+      );
+  }
+
+  getMyUser(accessToken, myUsers, group) {
+
+    this.settings.getCurrUserData(accessToken.value)
+    .subscribe(
+      data => {
+        myUsers.forEach(user => {
+          if (data.user_id === user.user_id) {
+
+            const navExtras: NavigationExtras = {
+              state: {
+                users: myUsers,
+                currentGroup: group,
+                myUser: user
+              }
+            };
+
+            this.router.navigate(['detail-group-page'], navExtras);
+          }
+        });
+      }
+    );
   }
 
 }

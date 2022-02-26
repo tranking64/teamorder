@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { format } from 'date-fns';
 import parseISO from 'date-fns/parseISO';
 import { AlertService } from 'src/app/services/alert.service';
@@ -39,11 +39,16 @@ export class SignupPage implements OnInit {
     private enumData: EnumerationDataService,
     private alert: AlertService,
     private loading: LoadingService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private navCtrl: NavController) { }
 
   ngOnInit() {
     this.getCountries();
     this.getGenders();
+  }
+
+  getBack() {
+    this.navCtrl.back();
   }
 
   async presentInvalidInputAlert() {

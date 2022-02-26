@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LoadingService } from 'src/app/services/loading.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-delete-acc',
@@ -20,9 +21,14 @@ export class DeleteAccPage implements OnInit {
     private router: Router,
     private loading: LoadingService,
     private alert: AlertService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private navCtrl: NavController) { }
 
   ngOnInit() {
+  }
+
+  getBack() {
+    this.navCtrl.back();
   }
 
   async delete() {

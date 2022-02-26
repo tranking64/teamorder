@@ -4,6 +4,7 @@ import { AuthService } from '../../../services/api/auth.service';
 import { AlertService } from '../../../services/alert.service';
 import { LoadingService } from '../../../services/loading.service';
 import { ToastService } from '../../../services/toast.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-new-pw',
@@ -21,9 +22,14 @@ export class NewPwPage implements OnInit {
     private router: Router,
     private loading: LoadingService,
     private alert: AlertService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private navCtrl: NavController) { }
 
   ngOnInit() {
+  }
+
+  getBack() {
+    this.navCtrl.navigateBack('forgot-pw');
   }
 
   resetPassword() {

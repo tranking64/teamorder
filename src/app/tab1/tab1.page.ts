@@ -20,31 +20,21 @@ export class Tab1Page {
   ) {}
 
   ionViewWillEnter() {
-    this.getOtherRunningOrders();
-    this.getMyInitialOrders();
-    this.getCurrentOrderings();
+    this.getInitialData();
   }
 
-  async getOtherRunningOrders() {
+  async getInitialData() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
     this.orderService.getOtherOrders(accessToken.value)
       .subscribe(
         data => this.otherRunningOrders = data.data
       );
-  }
-
-  async getMyInitialOrders() {
-    const accessToken = await Storage.get({ key: 'access_token' });
 
     this.orderService.getInitialOrders(accessToken.value)
       .subscribe(
         data => this.myInitialOrders = data.data
       );
-  }
-
-  async getCurrentOrderings() {
-    const accessToken = await Storage.get({ key: 'access_token' });
 
     this.orderService.getWithOrderings(accessToken.value)
       .subscribe(
@@ -74,13 +64,12 @@ export class Tab1Page {
     this.orderService.getSpecificOrders(accessToken.value, myInitialOrderData.initial_order_id)
       .subscribe(
         data => {
-          const passedData = {
-            initialOrderData: myInitialOrderData,
-            orders: data.data.orders
-          };
 
           const navExtras: NavigationExtras = {
-            state: passedData
+            state: {
+              initialOrderData: myInitialOrderData,
+              orders: data.data.orders
+            }
           };
 
           this.router.navigate(['order-detail'], navExtras);

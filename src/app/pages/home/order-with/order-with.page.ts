@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderService } from '../../../services/api/order.service';
 import { Storage } from '@capacitor/storage';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-order-with',
@@ -15,7 +16,8 @@ export class OrderWithPage implements OnInit {
 
   constructor(
     private router: Router,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() {
@@ -33,12 +35,8 @@ export class OrderWithPage implements OnInit {
       this.initialOrderData.initial_order_id)
         .subscribe(
           data => {
-            this.router.navigate(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
-          },
-          error => {
-            console.log(error);
-          }
-        );
+            this.navCtrl.navigateBack(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
+          });
   }
 
 }

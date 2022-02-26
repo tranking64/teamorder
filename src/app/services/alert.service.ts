@@ -10,7 +10,7 @@ export class AlertService {
 
   async presentSimpleAlert(msg) {
     const alert = await this.alertCtrl.create({
-      header: 'Warnung',
+      header: 'Achtung',
       message: msg,
       buttons: ['OK']
     });

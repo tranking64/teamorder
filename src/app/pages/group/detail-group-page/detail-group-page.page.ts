@@ -16,9 +16,7 @@ export class DetailGroupPagePage implements OnInit {
 
   currentGroup;
   users = [];
-  myUser = {
-    role_type: null
-  };
+  myUser;;
 
   constructor(
     private router: Router,
@@ -33,40 +31,10 @@ export class DetailGroupPagePage implements OnInit {
   }
 
   ngOnInit() {
-    this.loading.presentLoading();
-    this.currentGroup = this.router.getCurrentNavigation().extras.state;
-    this.fetchData(this.currentGroup);
-  }
-
-  ionViewWillEnter() {
-  }
-
-  async fetchData(routerState) {
-    const accessToken = await Storage.get({ key: 'access_token' });
-
-    this.groupService.getSpecificGroup(accessToken.value, routerState.group_id)
-      .subscribe(
-        async data => {
-          this.users = data.data.users;
-          await this.getMyUser();
-          this.loading.dismissLoading();
-        }
-      );
-  }
-
-  async getMyUser() {
-    const accessToken = await Storage.get({ key: 'access_token' });
-
-    this.settings.getCurrUserData(accessToken.value)
-    .subscribe(
-      data => {
-        this.users.forEach(user => {
-          if (data.user_id === user.user_id) {
-            this.myUser = user;
-          }
-        });
-      }
-    );
+    const routerState = this.router.getCurrentNavigation().extras.state;
+    this.currentGroup = routerState.currentGroup;
+    this.users = routerState.users;
+    this.myUser = routerState.myUser;
   }
 
   getBack() {
@@ -81,7 +49,7 @@ export class DetailGroupPagePage implements OnInit {
     this.router.navigate(['edit-group'], navExtras);
   }
 
-  async presentAlert() {
+  async presentDeleteAlert() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
     const alert = await this.alertCtrl.create({
@@ -112,10 +80,6 @@ export class DetailGroupPagePage implements OnInit {
     await alert.present();
   }
 
-  deleteGroup() {
-    this.presentAlert();
-  }
-
   async presentLeaveAlert() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
@@ -126,7 +90,6 @@ export class DetailGroupPagePage implements OnInit {
         {
           text: 'Nein',
           role: 'cancel',
-          //cssClass: 'secondary',
           id: 'cancel-button',
           handler: () => {
           }
@@ -147,59 +110,17 @@ export class DetailGroupPagePage implements OnInit {
     await alert.present();
   }
 
-  leaveGroup() {
-    this.presentLeaveAlert();
-  }
-
-  async presentRemoveAlert(currUser) {
-    const accessToken = await Storage.get({ key: 'access_token' });
-
-    const alert = await this.alertCtrl.create({
-      header: 'Warnung',
-      message: 'Möchtest du diesen Benuter wirklich aus der Gruppe entfernen?',
-      buttons: [
-        {
-          text: 'Nein',
-          role: 'cancel',
-          //cssClass: 'secondary',
-          id: 'cancel-button',
-          handler: () => {
-          }
-        }, {
-          text: 'Ja',
-          id: 'confirm-button',
-          handler: () => {
-            this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, currUser.user_id)
-              .subscribe(
-                // remove user in view
-                () => this.users = this.users.filter(elem => elem !== currUser)
-              );
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
-
-  removeUser(user) {
-    this.presentActionSheet(user);
-  }
-
   async presentActionSheet(user) {
     const accessToken = await Storage.get({ key: 'access_token' });
 
     console.log(user);
 
     const actionSheet = await this.actionSheetCtrl.create({
-      //header: 'Einstellungen',
       buttons: [
         {
           text: 'Aus Gruppe entfernen',
           role: 'destructive',
-          //icon: 'trash',
           handler: () => {
-            //this.presentRemoveAlert(user);
             this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, user.user_id)
                 .subscribe(
                   // remove user in view
@@ -209,7 +130,6 @@ export class DetailGroupPagePage implements OnInit {
         },
         {
           text: 'Abbrechen',
-          //icon: 'close',
           role: 'cancel'
         }
       ]
@@ -227,14 +147,11 @@ export class DetailGroupPagePage implements OnInit {
 
     if(user.role_type_en === 'MEMBER') {
       actionSheet = await this.actionSheetCtrl.create({
-        //header: 'Einstellungen',
         buttons: [
           {
             text: 'Aus Gruppe entfernen',
             role: 'destructive',
-            //icon: 'trash',
             handler: () => {
-              //this.presentRemoveAlert(user);
               this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, user.user_id)
                   .subscribe(
                     // remove user in view
@@ -243,7 +160,7 @@ export class DetailGroupPagePage implements OnInit {
             }
           },
           {
-            text: 'Zum Admin befördern',
+            text: 'Zum Admin machen',
             handler: () => {
               this.groupService.changeRole(
                 accessToken.value,
@@ -252,21 +169,14 @@ export class DetailGroupPagePage implements OnInit {
                 'ADMIN')
                   .subscribe(
                     data => {
-                      const objIndex = this.users.findIndex((elem => elem.user_id === user.user_id));
-                      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                      this.users[objIndex].role_type_en = 'ADMIN';
-                      this.users[objIndex].role_type = 'ADMIN';
-
-                      console.log(this.users);
-
-                      //this.router.navigate(['/tabs/tab2']);
+                      user.role_type_en = 'ADMIN';
+                      user.role_type = 'ADMIN';
                     }
                   );
             }
           },
           {
             text: 'Abbrechen',
-            //icon: 'close',
             role: 'cancel'
           }
         ]
@@ -274,46 +184,35 @@ export class DetailGroupPagePage implements OnInit {
     }
     else {
       actionSheet = await this.actionSheetCtrl.create({
-        //header: 'Einstellungen',
         buttons: [
           {
             text: 'Aus Gruppe entfernen',
             role: 'destructive',
-            //icon: 'trash',
             handler: () => {
-              //this.presentRemoveAlert(user);
               this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, user.user_id)
                   .subscribe(
-                    // remove user in view
                     () => this.users = this.users.filter(elem => elem !== user)
                   );
             }
           },
           {
-            text: 'Zum Mitglied degradieren',
+            text: 'Zum Mitglied machen',
             handler: () => {
-              user.role_type_en = 'MEMBER';
-
               this.groupService.changeRole(
                 accessToken.value,
                 this.currentGroup,
                 user.user_id,
-                user.role_type_en)
+                'MEMBER')
                   .subscribe(
                     data => {
-                      const objIndex = this.users.findIndex((elem => elem.user_id === user.user_id));
-                      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                      this.users[objIndex].role_type_en = 'MEMBER';
-                      this.users[objIndex].role_type = 'MEMBER';
-
-                      //this.router.navigate(['/tabs/tab2']);
+                      user.role_type_en = 'MEMBER';
+                      user.role_type = 'MITGLIED';
                     }
                   );
             }
           },
           {
             text: 'Abbrechen',
-            //icon: 'close',
             role: 'cancel'
           }
         ]
@@ -331,21 +230,6 @@ export class DetailGroupPagePage implements OnInit {
     };
 
     this.router.navigate(['invite-person'], navExtras);
-  }
-
-  manageUser(currentUser) {
-    this.presentAdminActionSheet(currentUser);
-
-    /*const data = {
-      user: currentUser,
-      group: this.currentGroup
-    };
-
-    const navExtras: NavigationExtras = {
-      state: data
-    };
-
-    this.router.navigate(['manage-user'], navExtras);*/
   }
 
   toTitleCase = (phrase) =>
