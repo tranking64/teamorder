@@ -1,5 +1,5 @@
 <ion-content forceOverscroll="false">
-  <ion-grid>
+  <ion-grid class="detail-page">
     <ion-row>
       <ion-col>
         <ion-icon name="chevron-back-sharp" color="medium" (click)="getBack()"></ion-icon>
@@ -19,39 +19,6 @@
         </ion-col>
       </div>
     </ion-row>
-    <!--<div *ngIf="myUser.role_type === 'ERSTELLER'; then thenBlock else elseBlock"></div>
-    <ng-template #thenBlock>
-      <div (click)="editGroup()">
-        <ion-row>
-          <ion-col class="ion-text-center">
-            <h1 class="ion-no-margin ion-margin-top">{{ currentGroup.group_name }}</h1>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col class="ion-text-center">
-            <ion-text color="medium">
-              {{ currentGroup.description }} (zum Editieren anklicken)
-            </ion-text>
-          </ion-col>
-        </ion-row>
-      </div>
-    </ng-template>
-    <ng-template #elseBlock>
-      <div>
-        <ion-row>
-          <ion-col class="ion-text-center">
-            <h1 class="ion-no-margin ion-margin-top">{{ currentGroup.group_name }}</h1>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col class="ion-text-center">
-            <ion-text color="medium">
-              {{ currentGroup.description }}
-            </ion-text>
-          </ion-col>
-        </ion-row>
-      </div>
-    </ng-template>-->
 
     <ion-row>
       <ion-col class="ion-text-center">
@@ -60,9 +27,7 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-text-center">
-        <ion-text color="medium">
-          {{ currentGroup.description }}
-        </ion-text>
+        <ion-text color="medium">{{ currentGroup.description }}</ion-text>
       </ion-col>
     </ion-row>
 
@@ -140,7 +105,7 @@
       <ion-row>
         <ion-col>
           <ion-button (click)="invite()">
-            <ion-icon slot="start" name="person-add"></ion-icon>
+            <ion-icon  slot="start" name="person-add"></ion-icon>
             Personen einladen
           </ion-button>
         </ion-col>

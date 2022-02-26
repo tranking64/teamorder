@@ -1,8 +1,8 @@
 <ion-content>
-  <ion-grid>
+  <ion-grid class="detail-page">
     <ion-row>
       <ion-col>
-        <ion-icon routerLink="/tabs/tab1" routerDirection="back" color="medium" name="chevron-back-sharp"></ion-icon>
+        <ion-icon (click)="getBack()" color="medium" name="chevron-back-sharp"></ion-icon>
       </ion-col>
     </ion-row>
 
@@ -31,8 +31,10 @@
       <ion-col class="ion-text-end">
         <b>Deadline:</b>
       </ion-col>
-      <ion-col style="color: red;" class="ion-text-start">
-        {{ initialOrderData.deadline.substring(11, initialOrderData.deadline.length - 3) }}
+      <ion-col class="ion-text-start">
+        <ion-text color="danger">
+          {{ initialOrderData.deadline.substring(11, initialOrderData.deadline.length - 3) }}
+        </ion-text>
       </ion-col>
     </ion-row>
 

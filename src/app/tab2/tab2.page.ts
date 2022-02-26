@@ -3,6 +3,7 @@ import { GroupService } from '../services/api/group.service';
 import { Storage } from '@capacitor/storage';
 import { NavigationExtras, Router } from '@angular/router';
 import { SettingsService } from '../services/api/settings.service';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab2',
@@ -19,10 +20,16 @@ export class Tab2Page {
     private groupService: GroupService,
     private router: Router,
     private settings: SettingsService,
+    private navCtrl: NavController,
+    private alertCtrl: AlertController
     ) { }
 
   ionViewWillEnter() {
     this.getInitialData();
+  }
+
+  getBack() {
+    this.navCtrl.navigateBack('/tabs/tab1').then(() => this.router.navigate(['/tabs/tab2']));
   }
 
   async getInitialData() {
@@ -48,18 +55,34 @@ export class Tab2Page {
     const accessToken = await Storage.get({ key: 'access_token' });
 
     this.groupService.acceptInvitation(accessToken.value, group.group_id)
-      .subscribe(
-        () => this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2']))
-      );
+      .subscribe(() => this.getBack());
   }
 
-  async declineInvite(group) {
+  async presentDeclineAlert(group) {
     const accessToken = await Storage.get({ key: 'access_token' });
 
-    this.groupService.declineInvitation(accessToken.value, group.group_id)
-      .subscribe(
-        () => this.invitations = this.invitations.filter(elem => elem !== group)
-      );
+    const alert = await this.alertCtrl.create({
+      header: 'Warnung',
+      message: 'Möchtest du diese Gruppeneinladung wirklich ablehnen?',
+      buttons: [
+        {
+          text: 'Nein',
+          role: 'cancel',
+          id: 'cancel-button',
+          handler: () => {
+          }
+        }, {
+          text: 'Ja',
+          id: 'confirm-button',
+          handler: () => {
+            this.groupService.declineInvitation(accessToken.value, group.group_id)
+              .subscribe(() => this.invitations = this.invitations.filter(elem => elem !== group));
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   async detailView(group) {
@@ -67,9 +90,7 @@ export class Tab2Page {
     const accessToken = await Storage.get({ key: 'access_token' });
 
     this.groupService.getSpecificGroup(accessToken.value, group.group_id)
-      .subscribe(
-        data => this.getMyUser(accessToken, data.data.users, group)
-      );
+      .subscribe(data => this.getMyUser(accessToken, data.data.users, group));
   }
 
   getMyUser(accessToken, myUsers, group) {
@@ -79,7 +100,6 @@ export class Tab2Page {
       data => {
         myUsers.forEach(user => {
           if (data.user_id === user.user_id) {
-
             const navExtras: NavigationExtras = {
               state: {
                 users: myUsers,

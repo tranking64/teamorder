@@ -25,6 +25,10 @@ export class OrderWithPage implements OnInit {
     this.initialOrderData = routerState;
   }
 
+  getBack() {
+    this.navCtrl.navigateBack(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
+  }
+
   async send() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
@@ -32,11 +36,8 @@ export class OrderWithPage implements OnInit {
       accessToken.value,
       this.orderContent,
       this.initialOrderData.group_id,
-      this.initialOrderData.initial_order_id)
-        .subscribe(
-          data => {
-            this.navCtrl.navigateBack(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
-          });
+      this.initialOrderData.initial_order_id
+    ).subscribe(data => this.getBack());
   }
 
 }

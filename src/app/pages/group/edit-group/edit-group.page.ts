@@ -38,7 +38,7 @@ export class EditGroupPage implements OnInit {
 
     this.groupService.updateGroup(accessToken.value, this.groupName, this.description, this.groupId)
       .subscribe(
-        () => this.router.navigate(['/tabs/tab1']).then(() => this.router.navigate(['tabs/tab2'])),
+        () => this.navCtrl.navigateBack(['/tabs/tab1']).then(() => this.router.navigate(['tabs/tab2'])),
         error => {
           if (error.status === 500 && error.error.status === 'error') {
             this.navCtrl.back();

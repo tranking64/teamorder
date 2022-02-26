@@ -81,7 +81,7 @@ export class SignupPage implements OnInit {
       this.alert.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
     }
 
-    else if (this.password.length < 7 && this.cPassword.length < 7) {
+    else if (this.password.length < 8 && this.cPassword.length < 8) {
       this.alert.presentSimpleAlert('Passwörter müssen mindestens 8 Zeichen haben!');
     }
 

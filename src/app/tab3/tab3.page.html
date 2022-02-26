@@ -21,7 +21,9 @@
                       <h2>{{ item.creditor.firstname }} {{ item.creditor.lastname }}</h2>
                     </ion-col>
                     <ion-col class="ion-text-end">
-                      <h2 class="creditorAmount">{{ item.outstanding_amount.toFixed(2) }}€</h2>
+                      <ion-text color="danger">
+                        <h2>{{ item.outstanding_amount.toFixed(2) }}€</h2>
+                      </ion-text>
                     </ion-col>
                   </ion-row>
                 </ion-card-content>
@@ -62,7 +64,9 @@
                     <h2>{{ item.debtor.firstname }} {{ item.debtor.lastname }}</h2>
                   </ion-col>
                   <ion-col class="ion-text-end">
-                    <h2 class="debtorAmount">{{ item.outstanding_amount.toFixed(2) }}€</h2>
+                    <ion-text color="primary">
+                      <h2>{{ item.outstanding_amount.toFixed(2) }}€</h2>
+                    </ion-text>
                   </ion-col>
                 </ion-row>
               </ion-card-content>

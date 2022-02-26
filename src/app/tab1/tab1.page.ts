@@ -25,14 +25,20 @@ export class Tab1Page {
 
   checkOrderOpen(cDeadline): boolean {
 
-    const deadline = new Date();
-    deadline.setMonth(cDeadline.substring(5, 7)-1);
-    deadline.setDate(cDeadline.substring(8, 10));
-    deadline.setHours(cDeadline.substring(11, 13));
-    deadline.setMinutes(cDeadline.substring(14, 16));
-    deadline.setSeconds(0);
+    const deadline = this.createDate(cDeadline);
 
     return deadline.getTime() > new Date().getTime();
+  }
+
+  createDate(data) {
+    const newDate = new Date();
+    newDate.setMonth(data.substring(5, 7)-1);
+    newDate.setDate(data.substring(8, 10));
+    newDate.setHours(data.substring(11, 13));
+    newDate.setMinutes(data.substring(14, 16));
+    newDate.setSeconds(0);
+
+    return newDate;
   }
 
   async getInitialData() {
@@ -43,24 +49,15 @@ export class Tab1Page {
         data => {
           this.otherRunningOrders = data.data;
 
-          this.otherRunningOrders.sort(
-            (curr, next) => {
-              const currDeadline = new Date();
-              currDeadline.setMonth(curr.deadline.substring(5, 7)-1);
-              currDeadline.setDate(curr.deadline.substring(8, 10));
-              currDeadline.setHours(curr.deadline.substring(11, 13));
-              currDeadline.setMinutes(curr.deadline.substring(14, 16));
-              currDeadline.setSeconds(0);
+          if (this.otherRunningOrders.length > 1) {
+            this.otherRunningOrders.sort(
+              (curr, next) => {
+                const currDeadline = this.createDate(curr.deadline);
+                const nextDeadline = this.createDate(next.deadline);
 
-              const nextDeadline = new Date();
-              nextDeadline.setMonth(next.deadline.substring(5, 7)-1);
-              nextDeadline.setDate(next.deadline.substring(8, 10));
-              nextDeadline.setHours(next.deadline.substring(11, 13));
-              nextDeadline.setMinutes(next.deadline.substring(14, 16));
-              nextDeadline.setSeconds(0);
-
-              return currDeadline.getTime() > nextDeadline.getTime() ? -1 : 1;
-            });
+                return currDeadline.getTime() > nextDeadline.getTime() ? -1 : 1;
+              });
+          }
         }
       );
 
@@ -68,31 +65,21 @@ export class Tab1Page {
       .subscribe(
         data => {
           this.myInitialOrders = data.data;
-          this.myInitialOrders.sort(
-            (curr, next) => {
-              const currDeadline = new Date();
-              currDeadline.setMonth(curr.deadline.substring(5, 7)-1);
-              currDeadline.setDate(curr.deadline.substring(8, 10));
-              currDeadline.setHours(curr.deadline.substring(11, 13));
-              currDeadline.setMinutes(curr.deadline.substring(14, 16));
-              currDeadline.setSeconds(0);
 
-              const nextDeadline = new Date();
-              nextDeadline.setMonth(next.deadline.substring(5, 7)-1);
-              nextDeadline.setDate(next.deadline.substring(8, 10));
-              nextDeadline.setHours(next.deadline.substring(11, 13));
-              nextDeadline.setMinutes(next.deadline.substring(14, 16));
-              nextDeadline.setSeconds(0);
+          if(this.myInitialOrders.length > 1) {
+            this.myInitialOrders.sort(
+              (curr, next) => {
+                const currDeadline = this.createDate(curr.deadline);
+                const nextDeadline = this.createDate(next.deadline);
 
-              return currDeadline.getTime() < nextDeadline.getTime() ? -1 : 1;
-            });
+                return currDeadline.getTime() < nextDeadline.getTime() ? -1 : 1;
+              });
+          }
         }
       );
 
     this.orderService.getWithOrderings(accessToken.value)
-      .subscribe(
-        data => this.currentWithOrderings = data.data
-      );
+      .subscribe(data => this.currentWithOrderings = data.data);
   }
 
   orderingData(data) {
@@ -117,7 +104,6 @@ export class Tab1Page {
     this.orderService.getSpecificOrders(accessToken.value, myInitialOrderData.initial_order_id)
       .subscribe(
         data => {
-
           const navExtras: NavigationExtras = {
             state: {
               initialOrderData: myInitialOrderData,

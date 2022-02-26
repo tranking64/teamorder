@@ -21,8 +21,7 @@ export class InvitePersonPage implements OnInit {
     private groupService: GroupService,
     private router: Router,
     private toastCtrl: ToastController,
-    private alert: AlertService,
-    private loading: LoadingService) {
+    private alert: AlertService) {
 
     }
 
@@ -39,7 +38,6 @@ export class InvitePersonPage implements OnInit {
   ngOnInit() {
     const routerState = this.router.getCurrentNavigation().extras.state;
     this.groupId = routerState.group_id;
-    console.log(this.groupId);
   }
 
   async invite() {

@@ -16,8 +16,8 @@ import { SettingsService } from 'src/app/services/api/settings.service';
 })
 export class LoginPage implements OnInit {
 
-  email = '';
-  password = '';
+  email;
+  password;
 
   constructor(
     private auth: AuthService,
@@ -47,8 +47,6 @@ export class LoginPage implements OnInit {
       );
   }
 
-  // called e.g. when from logout --> login
-  // removing old inpunts
   ionViewWillEnter() {
     this.email = '';
     this.password = '';
@@ -73,6 +71,7 @@ export class LoginPage implements OnInit {
             await Storage.remove({ key: 'access_token' });
             await Storage.remove({ key: 'refresh_token' });
 
+            // set new tokens
             await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
             await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
 
@@ -110,7 +109,6 @@ export class LoginPage implements OnInit {
 
     // passed validations
     else {
-      // unecessary?
       await Storage.remove({ key: 'access_token' });
       await Storage.remove({ key: 'refresh_token' });
 
@@ -121,8 +119,6 @@ export class LoginPage implements OnInit {
           // store tokens in local database
           await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
           await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
-
-          console.log('login works');
 
           this.platform.ready().then(() => this.oneSignalInit());
 
@@ -158,6 +154,5 @@ export class LoginPage implements OnInit {
           }
       });
     }
-
   }
 }

@@ -1,5 +1,5 @@
 <ion-content>
-  <ion-grid>
+  <ion-grid class="detail-page">
     <ion-row>
       <ion-col>
         <ion-icon (click)="getBack()" color="medium" name="chevron-back-sharp"></ion-icon>
@@ -46,7 +46,7 @@
                   <p>{{ item.order_content }}</p>
                 </ion-col>
                 <ion-col size="3" class="ion-text-end ion-align-self-center">
-                  <ion-icon color="danger" name="trash-sharp" (click)="remove(item)"></ion-icon>
+                  <ion-icon color="danger" name="trash-sharp" (click)="presentDeleteAlert(item)"></ion-icon>
                 </ion-col>
               </ion-row>
             </ion-card-content>

@@ -4,8 +4,6 @@ import { NavigationExtras, Router } from '@angular/router';
 import { GroupService } from '../../../services/api/group.service';
 import { Storage } from '@capacitor/storage';
 import { NavController, AlertController, ActionSheetController } from '@ionic/angular';
-import { SettingsService } from 'src/app/services/api/settings.service';
-import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-detail-group-page',
@@ -21,10 +19,8 @@ export class DetailGroupPagePage implements OnInit {
   constructor(
     private router: Router,
     private groupService: GroupService,
-    private settings: SettingsService,
     private navCtrl: NavController,
     private alertCtrl: AlertController,
-    private loading: LoadingService,
     private actionSheetCtrl: ActionSheetController
     ) {
 
@@ -38,7 +34,7 @@ export class DetailGroupPagePage implements OnInit {
   }
 
   getBack() {
-    this.navCtrl.back();
+    this.navCtrl.navigateBack(['/tabs/tab1']).then(() => this.router.navigate(['/tabs/tab2']));
   }
 
   editGroup() {
@@ -70,7 +66,7 @@ export class DetailGroupPagePage implements OnInit {
             this.groupService.deleteGroup(accessToken.value, this.currentGroup.group_id)
               .subscribe(
                 // bypass load bug
-                () => this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2']))
+                () => this.getBack()
               );
           }
         }
@@ -100,7 +96,7 @@ export class DetailGroupPagePage implements OnInit {
             this.groupService.leaveGroup(accessToken.value, this.currentGroup.group_id)
               .subscribe(
                 // bypass load bug
-                () => this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2']))
+                () => this.getBack()
               );
           }
         }
@@ -124,7 +120,7 @@ export class DetailGroupPagePage implements OnInit {
             this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, user.user_id)
                 .subscribe(
                   // remove user in view
-                  () => this.users = this.users.filter(elem => elem !== user)
+                  () => this.getBack()
                 );
           }
         },
@@ -155,7 +151,7 @@ export class DetailGroupPagePage implements OnInit {
               this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, user.user_id)
                   .subscribe(
                     // remove user in view
-                    () => this.users = this.users.filter(elem => elem !== user)
+                    () => this.getBack()
                   );
             }
           },

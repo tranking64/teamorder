@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { OrderService } from '../../../services/api/order.service';
 import { Storage } from '@capacitor/storage';
 import { AlertService } from 'src/app/services/alert.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-order-detail',
@@ -18,7 +19,8 @@ export class OrderDetailPage implements OnInit {
   constructor(
     private router: Router,
     private orderService: OrderService,
-    private alert: AlertService
+    private alert: AlertService,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() {
@@ -27,9 +29,24 @@ export class OrderDetailPage implements OnInit {
     this.orders = routerState.orders;
   }
 
-  checkDeadline(cDeadline): boolean {
+  getBack() {
+    this.navCtrl.navigateBack(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
+  }
 
+  createDate(data) {
+    const newDate = new Date();
+    newDate.setMonth(data.substring(5, 7)-1);
+    newDate.setDate(data.substring(8, 10));
+    newDate.setHours(data.substring(11, 13));
+    newDate.setMinutes(data.substring(14, 16));
+    newDate.setSeconds(0);
+
+    return newDate;
+  }
+
+  checkDeadline(cDeadline): boolean {
     const deadline = new Date();
+
     deadline.setMonth(cDeadline.substring(5, 7)-1);
     deadline.setDate(cDeadline.substring(8, 10));
     deadline.setHours(cDeadline.substring(11, 13));
@@ -58,14 +75,13 @@ export class OrderDetailPage implements OnInit {
     order.debt_amount = amount.replace(/,/g, '.');
     order.debt_amount = Number(order.debt_amount).toFixed(2);
 
-    if (order.debt_amount > 0 && order.debt_amount < 10000) {
+    if (order.debt_amount > 0 && order.debt_amount <= 100) {
       this.orderService.updatePrice(accessToken.value, order.order_id, order.debt_amount)
-      .subscribe(
-      );
+        .subscribe();
     }
     else {
       order.debt_amount = '';
-      this.alert.presentSimpleAlert('Ungültiger Preiswert');
+      this.alert.presentSimpleAlert('Ungültiger Preiswert (der Betrag darf maximal 100€ sein)');
     }
   }
 

@@ -19,7 +19,6 @@ export class Tab4Page {
     private auth: AuthService,
     private settings: SettingsService,
     private router: Router,
-    private alert: AlertService,
     private platform: Platform) { }
 
   navigateTo(url) {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Storage } from '@capacitor/storage';
+import { NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { GroupService } from '../../../services/api/group.service';
@@ -19,9 +20,14 @@ export class CreateGroupPage implements OnInit {
     private groupService: GroupService,
     private router: Router,
     private alert: AlertService,
-    private loading: LoadingService) { }
+    private loading: LoadingService,
+    private navCtrl: NavController) { }
 
   ngOnInit() {
+  }
+
+  getBack() {
+    this.navCtrl.navigateBack(['/tabs/tab1']).then(() => this.router.navigate(['/tabs/tab2']));
   }
 
   async create() {
@@ -39,7 +45,8 @@ export class CreateGroupPage implements OnInit {
           // bypass load bug
           () => {
             this.loading.dismissLoading();
-            this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2']));
+
+            this.navCtrl.navigateBack(['/tabs/tab1']).then(() => this.router.navigate(['tabs/tab2']));
           },
           error => {
             this.loading.dismissLoading();

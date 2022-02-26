@@ -112,7 +112,7 @@ export class UpdateUserPage implements OnInit {
       .subscribe(
         data => {
           this.loading.dismissLoading();
-          this.router.navigate(['/tabs/tab4']);
+          this.getBack();
           this.toast.presentSimpleToast('Kontodaten wurden erfolgreich geändert!');
         },
         error => {

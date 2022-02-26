@@ -14,9 +14,9 @@ import { NavController } from '@ionic/angular';
 })
 export class ChangePwPage implements OnInit {
 
-  oldPassword: string;
-  newPassword: string;
-  cNewPassword: string;
+  oldPassword;
+  newPassword;
+  cNewPassword;
 
   constructor(
     private settings: SettingsService,
@@ -37,6 +37,9 @@ export class ChangePwPage implements OnInit {
     if(this.newPassword !== this.cNewPassword) {
       this.alert.presentSimpleAlert('Neue Passwörter stimmen nicht überrein');
     }
+    else if(this.newPassword.length < 8 && this.cNewPassword.length < 8) {
+      this.alert.presentSimpleAlert('Passwort muss mindestens 8 Zeichen lang sein!');
+    }
     else {
       const accessToken = await Storage.get({ key: 'access_token' });
 
@@ -46,7 +49,7 @@ export class ChangePwPage implements OnInit {
         .subscribe(
           data => {
             this.loading.dismissLoading();
-            this.router.navigate(['/tabs/tab4']);
+            this.getBack();
             this.toast.presentSimpleToast('Passwort wurde erfolgreich geändert!');
           },
           error => {

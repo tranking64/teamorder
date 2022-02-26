@@ -12,7 +12,7 @@ import { NavController } from '@ionic/angular';
 })
 export class ForgotPwPage implements OnInit {
 
-  email: string;
+  email;
 
   constructor(
     private auth: AuthService,
@@ -32,22 +32,23 @@ export class ForgotPwPage implements OnInit {
     this.loading.presentLoading();
 
     this.auth.forgotPasswort(this.email)
-    .subscribe(
-      data => {
-        this.loading.dismissLoading();
-        this.router.navigate(['/new-pw']);
-      },
-      error => {
-        this.loading.dismissLoading();
+      .subscribe(
+        data => {
+          this.loading.dismissLoading();
 
-        if (error.status === 400 || 404) {
-          this.alert.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
+          this.router.navigate(['/new-pw']);
+        },
+        error => {
+          this.loading.dismissLoading();
+
+          if (error.status === 400 || 404) {
+            this.alert.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
+          }
+          else {
+            this.alert.presentSimpleAlert(error.error.message);
+          }
         }
-        else {
-          this.alert.presentSimpleAlert(error.error.message);
-        }
-      }
-    );
+      );
   }
 
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderService } from 'src/app/services/api/order.service';
 import { Storage } from '@capacitor/storage';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-with-orderings-detail',
@@ -17,7 +17,8 @@ export class WithOrderingsDetailPage implements OnInit {
   constructor(
     private router: Router,
     private orderService: OrderService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
@@ -30,20 +31,40 @@ export class WithOrderingsDetailPage implements OnInit {
     this.navCtrl.navigateBack(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
   }
 
-  async remove(item) {
+  async presentDeleteAlert(item) {
     const accessToken = await Storage.get({ key: 'access_token' });
 
-    this.orderService.removeWithOrder(accessToken.value, item.order_id)
-      .subscribe(
-        () => {
-          if(this.orders.length-1 === 0) {
-            this.getBack();
+    const alert = await this.alertCtrl.create({
+      header: 'Warnung',
+      message: 'Möchtest du diese Mitbestellung wirklich löschen?',
+      buttons: [
+        {
+          text: 'Nein',
+          role: 'cancel',
+          id: 'cancel-button',
+          handler: () => {
           }
-          else {
-            this.orders = this.orders.filter(element => element !== item);
+        }, {
+          text: 'Ja',
+          id: 'confirm-button',
+          handler: () => {
+            this.orderService.removeWithOrder(accessToken.value, item.order_id)
+              .subscribe(
+                () => {
+                  if(this.orders.length-1 === 0) {
+                    this.getBack();
+                  }
+                  else {
+                    this.orders = this.orders.filter(element => element !== item);
+                  }
+                }
+              );
           }
         }
-      );
+      ]
+    });
+
+    await alert.present();
   }
 
 }

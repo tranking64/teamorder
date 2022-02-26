@@ -7,6 +7,7 @@ import { format, parseISO } from 'date-fns';
 import { LoadingService } from '../../../services/loading.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../../../services/alert.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-create-order',
@@ -22,19 +23,25 @@ export class CreateOrderPage implements OnInit {
   formattedDatetime = '';
 
   deadline;
+  hours = [];
 
   constructor(
     private groupService: GroupService,
     private orderService: OrderService,
     private loadingService: LoadingService,
     private router: Router,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() {
     this.deadline = new Date();
     this.deadline.setHours(this.deadline.getHours() + 1);
     this.deadline = this.deadline.toISOString();
+
+    for (let index = new Date().getHours(); index <= 24; index++) {
+      this.hours.push(index.toString());
+    }
   }
 
   ionViewWillEnter() {
@@ -44,6 +51,10 @@ export class CreateOrderPage implements OnInit {
 
     this.getCreatorGroups();
     this.getOtherGroups();
+  }
+
+  getBack() {
+    this.navCtrl.navigateBack(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
   }
 
   async getCreatorGroups() {
@@ -87,7 +98,7 @@ export class CreateOrderPage implements OnInit {
         .subscribe(
           data => {
             this.loadingService.dismissLoading();
-            this.router.navigate(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
+            this.getBack();
           },
           error => {
             this.loadingService.dismissLoading();

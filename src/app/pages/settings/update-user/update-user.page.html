@@ -1,7 +1,7 @@
 <ion-content>
-  <div id="card">
+  <div class="card">
     <ion-icon (click)="getBack()" color="medium" name="chevron-back-sharp"></ion-icon>
-    <div id="container">
+    <div class="container">
       <ion-grid>
         <ion-row>
           <ion-col>
@@ -47,7 +47,7 @@
             <ion-modal trigger="open-modal">
               <ng-template>
                 <ion-content force-overscroll="false">
-                  <ion-datetime #datetime presentation="date" doneText="OK" cancelText="Abbrechen" [value]="birthDate" (ionChange)="dateChanged(datetime.value)" showDefaultButtons="true"></ion-datetime>
+                  <ion-datetime locale="de-DE" #datetime presentation="date" doneText="OK" cancelText="Abbrechen" [value]="birthDate" (ionChange)="dateChanged(datetime.value)" showDefaultButtons="true"></ion-datetime>
                 </ion-content>
               </ng-template>
             </ion-modal>
