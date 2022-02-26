@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { GroupService } from '../../../services/api/group.service';
 import { Storage } from '@capacitor/storage';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-edit-group',
@@ -15,7 +16,11 @@ export class EditGroupPage implements OnInit {
   description;
   groupId;
 
-  constructor(private navCtrl: NavController, private router: Router, private groupService: GroupService) { }
+  constructor(
+    private navCtrl: NavController,
+    private router: Router,
+    private groupService: GroupService,
+    private alertService: AlertService) { }
 
   ngOnInit() {
     const routerState = this.router.getCurrentNavigation().extras.state;
@@ -33,7 +38,18 @@ export class EditGroupPage implements OnInit {
 
     this.groupService.updateGroup(accessToken.value, this.groupName, this.description, this.groupId)
       .subscribe(
-        () => this.router.navigate(['/tabs']).then(() => this.router.navigate(['tabs/tab2']))
+        () => this.router.navigate(['/tabs/tab1']).then(() => this.router.navigate(['tabs/tab2'])),
+        error => {
+          if (error.status === 500 && error.error.status === 'error') {
+            this.navCtrl.back();
+          }
+          else if (error.status === 400 && error.error.status === 'group_name') {
+            this.alertService.presentSimpleAlert('Dieser Gruppenname existiert bereits!');
+          }
+          else {
+            this.alertService.presentSimpleAlert(error.error.message);
+          }
+        }
       );
   }
 

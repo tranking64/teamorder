@@ -7,6 +7,9 @@
       <!-- should only be visible for creators -->
       <div *ngIf="myUser.role_type === 'ERSTELLER'">
         <ion-col class="ion-text-end">
+          <ion-icon color="primary" name="create" (click)="editGroup()"></ion-icon>
+        </ion-col>
+        <ion-col class="ion-text-end">
           <ion-icon color="danger" name="trash-sharp" (click)="presentDeleteAlert()"></ion-icon>
         </ion-col>
       </div>
@@ -16,18 +19,18 @@
         </ion-col>
       </div>
     </ion-row>
-    <div *ngIf="myUser.role_type === 'ERSTELLER'; then thenBlock else elseBlock"></div>
+    <!--<div *ngIf="myUser.role_type === 'ERSTELLER'; then thenBlock else elseBlock"></div>
     <ng-template #thenBlock>
       <div (click)="editGroup()">
         <ion-row>
           <ion-col class="ion-text-center">
-            <h1>{{ currentGroup.group_name }}</h1>
+            <h1 class="ion-no-margin ion-margin-top">{{ currentGroup.group_name }}</h1>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col class="ion-text-center">
             <ion-text color="medium">
-              {{ currentGroup.description }}
+              {{ currentGroup.description }} (zum Editieren anklicken)
             </ion-text>
           </ion-col>
         </ion-row>
@@ -37,7 +40,7 @@
       <div>
         <ion-row>
           <ion-col class="ion-text-center">
-            <h1>{{ currentGroup.group_name }}</h1>
+            <h1 class="ion-no-margin ion-margin-top">{{ currentGroup.group_name }}</h1>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -48,7 +51,21 @@
           </ion-col>
         </ion-row>
       </div>
-    </ng-template>
+    </ng-template>-->
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <h1 class="ion-no-margin ion-margin-top">{{ currentGroup.group_name }}</h1>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-text color="medium">
+          {{ currentGroup.description }}
+        </ion-text>
+      </ion-col>
+    </ion-row>
+
     <div *ngFor="let user of users">
       <ion-row>
         <ion-col>

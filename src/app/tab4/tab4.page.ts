@@ -47,8 +47,6 @@ export class Tab4Page {
           );
         },
         async error => {
-          this.alert.presentSimpleAlert(error.error.message);
-
           await Storage.remove({ key: 'access_token' });
           await Storage.remove({ key: 'refresh_token' });
 

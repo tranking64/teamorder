@@ -16,9 +16,13 @@
             <ion-card class="ion-activatable ripple-parent ion-no-margin" (click)="detailView(item)">
               <ion-card-content>
                 <ion-row>
-                  <ion-col>
+                  <ion-col class="ion-align-self-center">
                     <h2>{{ item.group_name }}</h2>
                     <p>{{ item.place }}</p>
+                  </ion-col>
+                  <ion-col class="ion-text-end ion-align-self-center">
+                    <ion-icon *ngIf="checkOrderOpen(item.deadline) === true" color="warning" name="time"></ion-icon>
+                    <ion-icon *ngIf="checkOrderOpen(item.deadline) === false" color="primary" name="time"></ion-icon>
                   </ion-col>
                 </ion-row>
               </ion-card-content>
@@ -59,8 +63,10 @@
                     <h2>{{ item.group_name }}</h2>
                     <p>{{ item.place }}</p>
                   </ion-col>
-                  <ion-col class="ion-text-end ion-align-self-center deadline-text">
-                    bis {{ item.deadline.substring(11, item.deadline.length-3) }}
+                  <ion-col class="ion-text-end ion-align-self-center">
+                    <ion-text color="danger">
+                      bis {{ item.deadline.substring(11, item.deadline.length-3) }}
+                    </ion-text>
                   </ion-col>
                 </ion-row>
               </ion-card-content>

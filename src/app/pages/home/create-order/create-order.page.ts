@@ -73,6 +73,8 @@ export class CreateOrderPage implements OnInit {
 
     console.log(this.selectedGroupId);
 
+    console.log('this day: ' + this.deadline);
+
     this.loadingService.presentLoading();
 
     const accessToken = await Storage.get({ key: 'access_token' });

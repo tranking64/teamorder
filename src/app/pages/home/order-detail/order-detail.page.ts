@@ -29,9 +29,9 @@ export class OrderDetailPage implements OnInit {
 
   checkDeadline(cDeadline): boolean {
 
-    // funktioniert nicht wenn es über Mitternacht läuft
-
     const deadline = new Date();
+    deadline.setMonth(cDeadline.substring(5, 7)-1);
+    deadline.setDate(cDeadline.substring(8, 10));
     deadline.setHours(cDeadline.substring(11, 13));
     deadline.setMinutes(cDeadline.substring(14, 16));
     deadline.setSeconds(0);
