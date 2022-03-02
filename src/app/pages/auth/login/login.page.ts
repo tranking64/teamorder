@@ -67,6 +67,8 @@ export class LoginPage implements OnInit {
         .subscribe(
           async (data) => {
 
+            this.loading.dismissLoading();
+
             // remove old tokens
             await Storage.remove({ key: 'access_token' });
             await Storage.remove({ key: 'refresh_token' });
@@ -75,18 +77,16 @@ export class LoginPage implements OnInit {
             await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
             await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
 
-            this.loading.dismissLoading();
-
             this.platform.ready().then(() => this.oneSignalInit());
 
             this.router.navigate(['/tabs/tab1']);
           },
           async (error) => {
+            this.loading.dismissLoading();
+
             // delete possible old unvalid tokens
             await Storage.remove({ key: 'access_token' });
             await Storage.remove({ key: 'refresh_token' });
-
-            this.loading.dismissLoading();
 
             this.platform.ready().then(() => OneSignal.removeExternalUserId());
           }
