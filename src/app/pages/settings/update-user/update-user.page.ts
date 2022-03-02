@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { format, parseISO } from 'date-fns';
 import { SettingsService } from 'src/app/services/api/settings.service';
 import { Storage } from '@capacitor/storage';
@@ -27,10 +26,11 @@ export class UpdateUserPage implements OnInit {
   gender: string;
   country: string;
   birthDate = format(new Date(), 'yyyy-MM-dd');
+  maxDate = new Date().toISOString();
+
 
   constructor(
     private settings: SettingsService,
-    private router: Router,
     private loading: LoadingService,
     private enumData: EnumerationDataService,
     private alert: AlertService,
@@ -57,6 +57,27 @@ export class UpdateUserPage implements OnInit {
   async getInitialData() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
+    this.settings.getCurrUserData(accessToken.value)
+    .subscribe(
+      (data) => {
+        this.loading.dismissLoading();
+
+        // set data
+        this.firstName = data.firstname;
+        this.lastName = data.lastname;
+        this.email = data.email;
+        this.formattedDate = format(parseISO(data.date_of_birth), 'dd MMM yyyy');
+        this.birthDate = data.date_of_birth;
+        this.country = data.country.country_type;
+        this.gender = data.gender.gender_type;
+      },
+      (error) => {
+        this.loading.dismissLoading();
+
+        this.alert.presentSimpleAlert(error.error.message);
+      }
+    );
+
     this.enumData.fetchCountries().subscribe(
       data => this.countries = data.data
     );
@@ -65,26 +86,6 @@ export class UpdateUserPage implements OnInit {
       (data) => this.genders = data.data
     );
 
-    this.settings.getCurrUserData(accessToken.value)
-      .subscribe(
-        (data) => {
-          this.loading.dismissLoading();
-
-          // set data
-          this.firstName = data.firstname;
-          this.lastName = data.lastname;
-          this.email = data.email;
-          this.formattedDate = format(parseISO(data.date_of_birth), 'dd MMM yyyy');
-          this.birthDate = data.date_of_birth;
-          this.country = data.country.country_type;
-          this.gender = data.gender.gender_type;
-        },
-        (error) => {
-          this.loading.dismissLoading();
-
-          this.alert.presentSimpleAlert(error.error.message);
-        }
-      );
   }
 
   ngOnInit() {

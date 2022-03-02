@@ -31,6 +31,7 @@ export class SignupPage implements OnInit {
   gender = '';
   country = '';
   birthDate = format(new Date(), 'yyyy-MM-dd');
+  maxDate = new Date().toISOString();
 
   constructor(
     private alertCtrl: AlertController,

@@ -34,7 +34,7 @@ export class DetailGroupPagePage implements OnInit {
   }
 
   getBack() {
-    this.navCtrl.navigateBack(['/tabs/tab1']).then(() => this.router.navigate(['/tabs/tab2']));
+    this.navCtrl.navigateBack(['/tabs/tab4']).then(() => this.router.navigate(['/tabs/tab2']));
   }
 
   editGroup() {
@@ -120,7 +120,7 @@ export class DetailGroupPagePage implements OnInit {
             this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, user.user_id)
                 .subscribe(
                   // remove user in view
-                  () => this.getBack()
+                  () => this.users = this.users.filter(elem => elem !== user)
                 );
           }
         },
@@ -151,7 +151,7 @@ export class DetailGroupPagePage implements OnInit {
               this.groupService.removeUser(accessToken.value, this.currentGroup.group_id, user.user_id)
                   .subscribe(
                     // remove user in view
-                    () => this.getBack()
+                    () => this.users = this.users.filter(elem => elem !== user)
                   );
             }
           },

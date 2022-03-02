@@ -1,7 +1,8 @@
+
+
 <ion-content forceOverscroll="false">
 
   <ion-grid>
-
     <ion-row>
       <ion-col>
         <h2>Von dir gestartete Bestellungen</h2>
@@ -89,14 +90,14 @@
       </ion-row>
     </ng-template>
 
-    <ion-row>
-      <ion-col>
-        <h2>Deine Mitbestellungen</h2>
-      </ion-col>
-    </ion-row>
-    <div *ngIf="currentWithOrderings.length !== 0; then orderingsThenBlock else orderingsElseBlock"></div>
+    <div *ngIf="currentWithOrderings.length !== 0; then orderingsThenBlock"></div>
 
     <ng-template #orderingsThenBlock>
+      <ion-row>
+        <ion-col>
+          <h2>Deine Mitbestellungen</h2>
+        </ion-col>
+      </ion-row>
       <div *ngFor="let item of currentWithOrderings">
         <ion-row>
           <ion-col>
@@ -138,5 +139,9 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
+  <div class="loader">
+    <ion-progress-bar type="indeterminate" *ngIf="loaderActivated"></ion-progress-bar>
+  </div>
 
 </ion-content>

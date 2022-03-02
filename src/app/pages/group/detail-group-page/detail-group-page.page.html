@@ -83,7 +83,7 @@
                   <ion-col>
                     <ion-row>
                       <div *ngIf="user.user_id === myUser.user_id; else elseBlock">
-                        <b>{{ user.firstname }} {{ user.lastname }}</b>
+                        <h2 class="bold">{{ user.firstname }} {{ user.lastname }}</h2>
                       </div>
                       <ng-template #elseBlock>
                         <h2>{{ user.firstname }} {{ user.lastname }}</h2>

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { OrderService } from '../../../services/api/order.service';
 import { Storage } from '@capacitor/storage';
 import { AlertService } from 'src/app/services/alert.service';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-order-detail',
@@ -20,7 +20,8 @@ export class OrderDetailPage implements OnInit {
     private router: Router,
     private orderService: OrderService,
     private alert: AlertService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
@@ -45,17 +46,6 @@ export class OrderDetailPage implements OnInit {
     return deadline.getTime() > new Date().getTime();
   }
 
-  async finish(orderId) {
-
-    const accessToken = await Storage.get({ key: 'access_token' });
-
-    this.orderService.finishOrder(accessToken.value, orderId)
-      .subscribe(
-        data => this.getBack(),
-        error => this.alert.presentSimpleAlert('Fülle bitte alle Preiseingaben aus!')
-      );
-  }
-
   async updatePrice(order, amount) {
 
     if (amount !== '') {
@@ -76,6 +66,36 @@ export class OrderDetailPage implements OnInit {
       }
     }
 
+  }
+
+  async presentConfirmAlert(orderId) {
+    const accessToken = await Storage.get({ key: 'access_token' });
+
+    const alert = await this.alertCtrl.create({
+      header: 'Achtung',
+      message: 'Nach dem Bestätigen dieser Aktion kannst du keine Änderungen mehr vornehmen!',
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel',
+          id: 'cancel-button',
+          handler: () => {
+          }
+        }, {
+          text: 'Ok',
+          id: 'confirm-button',
+          handler: () => {
+            this.orderService.finishOrder(accessToken.value, orderId)
+              .subscribe(
+                data => this.getBack(),
+                error => this.alert.presentSimpleAlert('Fülle bitte alle Preiseingaben aus!')
+              );
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 }

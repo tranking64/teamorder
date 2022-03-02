@@ -82,7 +82,7 @@
     <!-- only activate if deadline done -->
     <ion-row>
       <ion-col>
-        <ion-button [disabled]="checkDeadline(initialOrderData.deadline)" (click)="finish(initialOrderData.initial_order_id)">
+        <ion-button [disabled]="checkDeadline(initialOrderData.deadline)" (click)="presentConfirmAlert(initialOrderData.initial_order_id)">
           Als "erledigt" markieren
         </ion-button>
       </ion-col>

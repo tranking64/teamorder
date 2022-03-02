@@ -13,12 +13,15 @@ export class Tab3Page {
   debtors = [];
   creditors = [];
 
+  loaderActivated = false;
+
   constructor(
     private debtSerivce: DebtService,
     private alertCtrl: AlertController
   ) {}
 
   ionViewWillEnter() {
+    this.loaderActivated = true;
     this.getInitialData();
   }
 
@@ -33,7 +36,10 @@ export class Tab3Page {
 
     this.debtSerivce.getCreditors(accessToken.value)
       .subscribe(
-        data => this.creditors = data.data
+        data => {
+          this.creditors = data.data;
+          this.loaderActivated = false;
+        }
       );
   }
 

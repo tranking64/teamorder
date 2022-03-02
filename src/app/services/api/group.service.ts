@@ -67,7 +67,6 @@ export class GroupService {
     .set('Content-Type', 'application/json')
     .set('Authorization', accessToken);
 
-
     return this.http.request('delete', 'https://diplom2021.itkaufmann.cloud/api/group/delete/' + id, {headers});
   }
 

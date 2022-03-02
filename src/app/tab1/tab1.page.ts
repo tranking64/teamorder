@@ -14,12 +14,15 @@ export class Tab1Page {
   otherRunningOrders = [];
   currentWithOrderings = [];
 
+  loaderActivated = false;
+
   constructor(
     private orderService: OrderService,
     private router: Router
   ) {}
 
   ionViewWillEnter() {
+    this.loaderActivated = true;
     this.getInitialData();
   }
 
@@ -79,7 +82,10 @@ export class Tab1Page {
       );
 
     this.orderService.getWithOrderings(accessToken.value)
-      .subscribe(data => this.currentWithOrderings = data.data);
+      .subscribe(data => {
+        this.currentWithOrderings = data.data;
+        this.loaderActivated = false;
+      });
   }
 
   orderingData(data) {

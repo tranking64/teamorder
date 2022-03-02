@@ -4,6 +4,7 @@ import { Storage } from '@capacitor/storage';
 import { NavigationExtras, Router } from '@angular/router';
 import { SettingsService } from '../services/api/settings.service';
 import { AlertController, NavController } from '@ionic/angular';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-tab2',
@@ -16,15 +17,19 @@ export class Tab2Page {
   otherGroups = [];
   invitations = [];
 
+  loaderActivated = false;
+
   constructor(
     private groupService: GroupService,
     private router: Router,
     private settings: SettingsService,
     private navCtrl: NavController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private loadingService: LoadingService
     ) { }
 
   ionViewWillEnter() {
+    this.loaderActivated = true;
     this.getInitialData();
   }
 
@@ -47,7 +52,10 @@ export class Tab2Page {
 
     this.groupService.getInvitations(accessToken.value)
       .subscribe(
-        data => this.invitations = data.data
+        data => {
+          this.invitations = data.data;
+          this.loaderActivated = false;
+        }
       );
   }
 
@@ -91,6 +99,8 @@ export class Tab2Page {
 
   async detailView(group) {
 
+    this.loadingService.presentLoading();
+
     const accessToken = await Storage.get({ key: 'access_token' });
 
     this.groupService.getSpecificGroup(accessToken.value, group.group_id)
@@ -111,6 +121,8 @@ export class Tab2Page {
                 myUser: user
               }
             };
+
+            this.loadingService.dismissLoading();
 
             this.router.navigate(['detail-group-page'], navExtras);
           }

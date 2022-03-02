@@ -29,6 +29,14 @@ ion-content {
   font-size: 14px;
 }
 
+.loader {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+}
+
 .detail-page {
   ion-icon {
     font-size: 30px;

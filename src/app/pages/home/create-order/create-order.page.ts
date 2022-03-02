@@ -40,7 +40,7 @@ export class CreateOrderPage implements OnInit {
     const currentDatetime = new Date();
     currentDatetime.setHours(currentDatetime.getHours() + 1);
 
-    this.deadline = new Date(Math.ceil(currentDatetime.getTime() / 900000) * 900000);
+    this.deadline = new Date(Math.ceil(currentDatetime.getTime() / 900000) * 900000).toISOString();
     this.minRoundedTime = new Date(Math.ceil(currentDatetime.getTime() / 900000) * 900000).toISOString();
   }
 

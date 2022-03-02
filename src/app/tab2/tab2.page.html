@@ -29,7 +29,7 @@
         <ion-col>
           <ion-card class="ion-no-margin">
             <ion-card-content class="ion-text-center">
-              <p>Keine von dir erstellten Gruppen</p>
+              <p>Du hast noch keine Gruppen erstellt</p>
             </ion-card-content>
           </ion-card>
         </ion-col>
@@ -63,7 +63,7 @@
         <ion-col>
           <ion-card class="ion-no-margin">
             <ion-card-content class="ion-text-center">
-              <p>Keine von anderen erstellten Gruppen</p>
+              <p>Du bist zurzeit in keinen anderen Gruppen</p>
             </ion-card-content>
           </ion-card>
         </ion-col>
@@ -104,5 +104,9 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
+  <div class="loader">
+    <ion-progress-bar type="indeterminate" *ngIf="loaderActivated"></ion-progress-bar>
+  </div>
 
 </ion-content>

@@ -23,12 +23,12 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-input placeholder="Neues Passwort" type="password" [(ngModel)]="password"></ion-input>
+            <ion-input placeholder="Passwort" type="password" [(ngModel)]="password"></ion-input>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-input placeholder="Neues Passwort bestätigen" type="password" [(ngModel)]="cPassword"></ion-input>
+            <ion-input placeholder="Passwort bestätigen" type="password" [(ngModel)]="cPassword"></ion-input>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -57,7 +57,7 @@
             <ion-modal trigger="open-modal">
               <ng-template>
                 <ion-content force-overscroll="false">
-                  <ion-datetime locale="de-DE" #datetime presentation="date" [value]="birthDate" (ionChange)="dateChanged(datetime.value)" doneText="OK" cancelText="Abbrechen" showDefaultButtons="true"></ion-datetime>
+                  <ion-datetime locale="de-DE" [max]="maxDate" #datetime presentation="date" [value]="birthDate" (ionChange)="dateChanged(datetime.value)" doneText="OK" cancelText="Abbrechen" showDefaultButtons="true"></ion-datetime>
                 </ion-content>
               </ng-template>
             </ion-modal>
