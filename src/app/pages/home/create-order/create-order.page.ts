@@ -17,14 +17,14 @@ import { NavController } from '@ionic/angular';
 export class CreateOrderPage implements OnInit {
 
   groupsArr = [];
-  selectedGroupId;
+  selectedGroupId = null;
   place = '';
-
   formattedDatetime = '';
 
   deadline;
   hours = [];
 
+  minHourTime;
   minRoundedTime;
 
   constructor(
@@ -40,15 +40,16 @@ export class CreateOrderPage implements OnInit {
     const currentDatetime = new Date();
     currentDatetime.setHours(currentDatetime.getHours() + 1);
 
-    this.deadline = new Date(Math.ceil(currentDatetime.getTime() / 900000) * 900000).toISOString();
-    this.minRoundedTime = new Date(Math.ceil(currentDatetime.getTime() / 900000) * 900000).toISOString();
+    this.minRoundedTime  = new Date(Math.ceil(currentDatetime.getTime() / 900000) * 900000).toISOString();
+    this.deadline = this.minRoundedTime;
+
+    this.minHourTime = currentDatetime;
+    this.minHourTime.setMinutes(0);
+    this.minHourTime.setSeconds(0);
+    this.minHourTime = this.minHourTime.toISOString();
   }
 
   ionViewWillEnter() {
-    this.selectedGroupId = null;
-    this.place = '';
-    this.deadline = '';
-
     this.getCreatorGroups();
     this.getOtherGroups();
   }
@@ -76,43 +77,45 @@ export class CreateOrderPage implements OnInit {
   }
 
   dateChanged(value) {
-    this.deadline = value.substring(0, 19) + '+01:00';
-    this.formattedDatetime = format(parseISO(this.deadline), 'dd MMM yyyy, HH:mm');
+
+    if (new Date(value.substring(0, 19)).getTime() < new Date(this.minRoundedTime.substring(0, 19)).getTime()) {
+      this.alertService.presentSimpleAlert('Bitte wähle eine spätere Deadline!');
+    }
+    else {
+      this.deadline = value.substring(0, 19) + '+01:00';
+      this.formattedDatetime = format(parseISO(this.deadline), 'dd MMM yyyy, HH:mm');
+    }
   }
 
   async start() {
 
-    console.log(this.selectedGroupId);
+    if (this.place !== '' && this.formattedDatetime !== '' && this.selectedGroupId !== null) {
+      this.loadingService.presentLoading();
 
-    console.log('this day: ' + this.deadline);
+      const accessToken = await Storage.get({ key: 'access_token' });
 
-    this.loadingService.presentLoading();
+      this.orderService.createInitialOrder(
+        accessToken.value,
+        this.place,
+        this.deadline.substring(0, this.deadline.length-6),
+        this.selectedGroupId)
+          .subscribe(
+            data => {
+              this.loadingService.dismissLoading();
+              this.getBack();
+            },
+            error => {
+              this.loadingService.dismissLoading();
 
-    const accessToken = await Storage.get({ key: 'access_token' });
+              const errorCode = error.status;
 
-    this.orderService.createInitialOrder(
-      accessToken.value,
-      this.place,
-      this.deadline.substring(0, this.deadline.length-6),
-      this.selectedGroupId)
-        .subscribe(
-          data => {
-            this.loadingService.dismissLoading();
-            this.getBack();
-          },
-          error => {
-            this.loadingService.dismissLoading();
-
-            const errorCode = error.status;
-
-            if (errorCode === 400) {
-              this.alertService.presentSimpleAlert('Bitte fülle alle Eingabefelder aus!');
-            }
-            else {
               this.alertService.presentSimpleAlert(error.error.message);
             }
-          }
-        );
+          );
+    }
+    else {
+      this.alertService.presentSimpleAlert('Bitte fülle alle Eingabefelder aus!');
+    }
   }
 
 }
