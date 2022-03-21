@@ -8,9 +8,11 @@
         <h2>Von dir gestartete Bestellungen</h2>
       </ion-col>
     </ion-row>
+
     <div *ngIf="myInitialOrders.length !== 0; then thenBlock else elseBlock"></div>
 
     <ng-template #thenBlock>
+      <!-- list all orders which were started by the current app user -->
       <div *ngFor="let item of myInitialOrders">
         <ion-row>
           <ion-col>
@@ -22,6 +24,8 @@
                     <p>{{ item.place }}</p>
                   </ion-col>
                   <ion-col class="ion-text-end ion-align-self-center">
+                    <!-- check current state of the order (if deadline was passed) -->
+                    <!-- indicator by blue or yellow color of the item -->
                     <ion-icon *ngIf="checkOrderOpen(item.deadline) === true" color="warning" name="time"></ion-icon>
                     <ion-icon *ngIf="checkOrderOpen(item.deadline) === false" color="primary" name="time"></ion-icon>
                   </ion-col>
@@ -54,6 +58,7 @@
     <div *ngIf="otherRunningOrders.length !== 0; then runningThenBlock else runningElseBlock"></div>
 
     <ng-template #runningThenBlock>
+      <!-- list all orders which were started by other users (with-order possibilities) -->
       <div *ngFor="let item of otherRunningOrders">
         <ion-row>
           <ion-col>
@@ -98,6 +103,7 @@
           <h2>Deine Mitbestellungen</h2>
         </ion-col>
       </ion-row>
+      <!-- list all my with-orders -->
       <div *ngFor="let item of currentWithOrderings">
         <ion-row>
           <ion-col>
@@ -140,6 +146,7 @@
     </ion-fab-button>
   </ion-fab>
 
+  <!-- indicator that site is still loading data; bottom of the page / above navbar -->
   <div class="loader">
     <ion-progress-bar type="indeterminate" *ngIf="loaderActivated"></ion-progress-bar>
   </div>

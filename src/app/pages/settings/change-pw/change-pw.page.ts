@@ -19,11 +19,10 @@ export class ChangePwPage implements OnInit {
   cNewPassword;
 
   constructor(
-    private settings: SettingsService,
-    private router: Router,
-    private alert: AlertService,
-    private loading: LoadingService,
-    private toast: ToastService,
+    private settingsService: SettingsService,
+    private alertService: AlertService,
+    private loadingService: LoadingService,
+    private toastService: ToastService,
     private navCtrl: NavController) { }
 
   ngOnInit() {
@@ -35,37 +34,38 @@ export class ChangePwPage implements OnInit {
 
   async change() {
     if(this.newPassword !== this.cNewPassword) {
-      this.alert.presentSimpleAlert('Neue Passwörter stimmen nicht überrein');
+      this.alertService.presentSimpleAlert('Neue Passwörter stimmen nicht überrein');
     }
     else if(this.newPassword.length < 8 && this.cNewPassword.length < 8) {
-      this.alert.presentSimpleAlert('Passwort muss mindestens 8 Zeichen lang sein!');
+      this.alertService.presentSimpleAlert('Passwort muss mindestens 8 Zeichen lang sein!');
     }
     else {
       const accessToken = await Storage.get({ key: 'access_token' });
 
-      this.loading.presentLoading();
+      this.loadingService.presentLoading();
 
-      this.settings.changePassword(this.oldPassword, this.newPassword, accessToken.value)
+      this.settingsService.changePassword(this.oldPassword, this.newPassword, accessToken.value)
         .subscribe(
           data => {
-            this.loading.dismissLoading();
+            this.loadingService.dismissLoading();
             this.getBack();
-            this.toast.presentSimpleToast('Passwort wurde erfolgreich geändert!');
+            this.toastService.presentSimpleToast('Passwort wurde erfolgreich geändert!');
           },
           error => {
-            this.loading.dismissLoading();
+            this.loadingService.dismissLoading();
 
             const errorCode = error.status;
 
+            // check error type
             if (errorCode === 400) {
-              this.alert.presentSimpleAlert('Bitte fülle alle Eingabefelder aus!');
+              this.alertService.presentSimpleAlert('Bitte fülle alle Eingabefelder aus!');
             }
             else if (errorCode === 406) {
               console.log(this.oldPassword);
-              this.alert.presentSimpleAlert('Eingegebenes Passwort ist inkorrekt!');
+              this.alertService.presentSimpleAlert('Eingegebenes Passwort ist inkorrekt!');
             }
             else {
-              this.alert.presentSimpleAlert(error.error.message);
+              this.alertService.presentSimpleAlert(error.error.message);
             }
           }
         );

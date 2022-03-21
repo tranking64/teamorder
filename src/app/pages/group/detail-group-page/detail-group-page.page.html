@@ -4,7 +4,7 @@
       <ion-col>
         <ion-icon name="chevron-back-sharp" color="medium" (click)="getBack()"></ion-icon>
       </ion-col>
-      <!-- should only be visible for creators -->
+      <!-- elements to edit or delete the group -->
       <div *ngIf="myUser.role_type === 'ERSTELLER'">
         <ion-col class="ion-text-end">
           <ion-icon color="primary" name="create" (click)="editGroup()"></ion-icon>
@@ -13,6 +13,7 @@
           <ion-icon color="danger" name="trash-sharp" (click)="presentDeleteAlert()"></ion-icon>
         </ion-col>
       </div>
+      <!-- leave-button for admin and members of a group -->
       <div *ngIf="myUser.role_type === 'ADMIN' || myUser.role_type === 'MITGLIED'">
         <ion-col class="ion-text-end">
           <ion-icon color="danger" name="exit" (click)="presentLeaveAlert()"></ion-icon>
@@ -31,13 +32,38 @@
       </ion-col>
     </ion-row>
 
+    <!-- list all group members -->
     <div *ngFor="let user of users">
       <ion-row>
         <ion-col>
+          <!-- check if the current user from the iteration has a lower rank/role -->
           <div *ngIf="(user.user_id !== myUser.user_id && (myUser.role_type === 'ERSTELLER' || myUser.role_type === 'ADMIN' && user.role_type === 'MITGLIED')); then thenBlock else elseBlock"></div>
           <ng-template #thenBlock>
             <div *ngIf="myUser.role_type === 'ERSTELLER'; then thenBlock else elseBlock"></div>
+
+            <!-- current app user of the app is the creator -->
             <ng-template #thenBlock>
+              <ion-card class="ion-no-margin">
+                <ion-card-content>
+                  <ion-row>
+                    <ion-col>
+                      <ion-row>
+                        <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+                      </ion-row>
+                      <ion-row>
+                        <span>{{ toTitleCase(user.role_type) }}</span>
+                      </ion-row>
+                    </ion-col>
+                    <ion-col class="ion-text-end ion-align-self-center">
+                      <ion-icon name="ellipsis-horizontal-sharp" (click)="presentCreatorActionSheet(user)"></ion-icon>
+                    </ion-col>
+                  </ion-row>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+
+            <!-- current app user of the app is an admin -->
+            <ng-template #elseBlock>
               <ion-card class="ion-no-margin">
                 <ion-card-content>
                   <ion-row>
@@ -56,32 +82,16 @@
                 </ion-card-content>
               </ion-card>
             </ng-template>
-            <ng-template #elseBlock>
-              <ion-card class="ion-no-margin">
-                <ion-card-content>
-                  <ion-row>
-                    <ion-col>
-                      <ion-row>
-                        <h2>{{ user.firstname }} {{ user.lastname }}</h2>
-                      </ion-row>
-                      <ion-row>
-                        <span>{{ toTitleCase(user.role_type) }}</span>
-                      </ion-row>
-                    </ion-col>
-                    <ion-col class="ion-text-end ion-align-self-center">
-                      <ion-icon name="ellipsis-horizontal-sharp" (click)="presentActionSheet(user)"></ion-icon>
-                    </ion-col>
-                  </ion-row>
-                </ion-card-content>
-              </ion-card>
-            </ng-template>
           </ng-template>
+
+          <!-- current app user and current user from the iterration have the same rank  -->
           <ng-template #elseBlock>
             <ion-card class="ion-no-margin">
               <ion-card-content>
                 <ion-row>
                   <ion-col>
                     <ion-row>
+                      <!-- case: current app user is the current user from the iteration -->
                       <div *ngIf="user.user_id === myUser.user_id; else elseBlock">
                         <h2 class="bold">{{ user.firstname }} {{ user.lastname }}</h2>
                       </div>
@@ -97,10 +107,12 @@
               </ion-card-content>
             </ion-card>
           </ng-template>
+
         </ion-col>
       </ion-row>
     </div>
 
+    <!-- invite functionality only available for creators and admins -->
     <div *ngIf="myUser.role_type === 'ERSTELLER' || myUser.role_type === 'ADMIN'">
       <ion-row>
         <ion-col>

@@ -15,10 +15,10 @@ export class ForgotPwPage implements OnInit {
   email;
 
   constructor(
-    private auth: AuthService,
+    private authService: AuthService,
     private router: Router,
-    private alert: AlertService,
-    private loading: LoadingService,
+    private alertService: AlertService,
+    private loadingService: LoadingService,
     private navCtrl: NavController) { }
 
   ngOnInit() {
@@ -29,23 +29,24 @@ export class ForgotPwPage implements OnInit {
   }
 
   sendLink() {
-    this.loading.presentLoading();
+    this.loadingService.presentLoading();
 
-    this.auth.forgotPasswort(this.email)
+    this.authService.forgotPasswort(this.email)
       .subscribe(
         data => {
-          this.loading.dismissLoading();
+          this.loadingService.dismissLoading();
 
           this.router.navigate(['/new-pw']);
         },
         error => {
-          this.loading.dismissLoading();
+          this.loadingService.dismissLoading();
 
+          // check http error code
           if (error.status === 400 || 404) {
-            this.alert.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
+            this.alertService.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
           }
           else {
-            this.alert.presentSimpleAlert(error.error.message);
+            this.alertService.presentSimpleAlert(error.error.message);
           }
         }
       );

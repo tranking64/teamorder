@@ -4,6 +4,7 @@ import { NavController } from '@ionic/angular';
 import { GroupService } from '../../../services/api/group.service';
 import { Storage } from '@capacitor/storage';
 import { AlertService } from 'src/app/services/alert.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-edit-group',
@@ -20,7 +21,8 @@ export class EditGroupPage implements OnInit {
     private navCtrl: NavController,
     private router: Router,
     private groupService: GroupService,
-    private alertService: AlertService) { }
+    private alertService: AlertService,
+    private loadingService: LoadingService) { }
 
   ngOnInit() {
     const routerState = this.router.getCurrentNavigation().extras.state;
@@ -36,10 +38,20 @@ export class EditGroupPage implements OnInit {
   async update() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
+    this.loadingService.presentLoading();
+
     this.groupService.updateGroup(accessToken.value, this.groupName, this.description, this.groupId)
       .subscribe(
-        () => this.navCtrl.navigateBack(['/tabs/tab1']).then(() => this.router.navigate(['tabs/tab2'])),
+        () => {
+          this.loadingService.dismissLoading();
+
+          // bypass refresh bug
+          this.navCtrl.navigateBack(['/tabs/tab4']).then(() => this.router.navigate(['tabs/tab2']));
+        },
         error => {
+          this.loadingService.dismissLoading();
+
+          // check error type
           if (error.status === 500 && error.error.status === 'error') {
             this.navCtrl.back();
           }

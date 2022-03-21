@@ -32,12 +32,14 @@
         <b>Deadline:</b>
       </ion-col>
       <ion-col class="ion-text-start">
+        <!-- get time from date variable -->
         <ion-text color="danger">
           {{ initialOrderData.deadline.substring(11, initialOrderData.deadline.length - 3) }}
         </ion-text>
       </ion-col>
     </ion-row>
 
+    <!-- check if any with-orders exist -->
     <div *ngIf="orders.length !== 0; then thenBlock else elseBlock"></div>
     <ng-template #thenBlock>
       <div *ngFor="let item of orders">
@@ -51,11 +53,13 @@
                     <p>{{ item.order_content }}</p>
                   </ion-col>
                   <ion-col size="5" class="ion-align-self-center">
+                    <!-- check if any price value was already entered -->
                     <div *ngIf="item.debt_amount !== null; then thenBlock else elseBlock"></div>
                     <ng-template #thenBlock>
-                      <ion-input [disabled]="checkDeadline(initialOrderData.deadline)" inputmode="decimal" class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€" value="{{ item.debt_amount }}"></ion-input>
+                      <ion-input inputmode="decimal" class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€" value="{{ item.debt_amount }}"></ion-input>
                     </ng-template>
                     <ng-template #elseBlock>
+                      <!-- only activated if deadline is passed -->
                       <ion-input [disabled]="checkDeadline(initialOrderData.deadline)" inputmode="decimal" class="ion-text-center" #debt (ionBlur)="updatePrice(item, debt.value)" placeholder="€€€"></ion-input>
                     </ng-template>
                   </ion-col>
@@ -79,7 +83,7 @@
     </ng-template>
 
 
-    <!-- only activate if deadline done -->
+    <!-- only activated if deadline is passed -->
     <ion-row>
       <ion-col>
         <ion-button [disabled]="checkDeadline(initialOrderData.deadline)" (click)="presentConfirmAlert(initialOrderData.initial_order_id)">

@@ -28,6 +28,7 @@ export class Tab4Page {
   async logout() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
+    // unsubscribe the device from getting any notifications
     this.platform.ready().then(() => OneSignal.removeExternalUserId());
 
     this.settings.getCurrUserData(accessToken.value)

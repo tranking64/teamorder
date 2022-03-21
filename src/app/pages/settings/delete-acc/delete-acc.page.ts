@@ -17,11 +17,11 @@ export class DeleteAccPage implements OnInit {
   password;
 
   constructor(
-    private settings: SettingsService,
+    private settingsService: SettingsService,
     private router: Router,
-    private loading: LoadingService,
-    private alert: AlertService,
-    private toast: ToastService,
+    private loadingService: LoadingService,
+    private alertService: AlertService,
+    private toastService: ToastService,
     private navCtrl: NavController) { }
 
   ngOnInit() {
@@ -34,25 +34,26 @@ export class DeleteAccPage implements OnInit {
   async delete() {
     const accessToken = await Storage.get({key: 'access_token'});
 
-    this.loading.presentLoading();
+    this.loadingService.presentLoading();
 
-    this.settings.deleteAccount(this.password, accessToken.value)
+    this.settingsService.deleteAccount(this.password, accessToken.value)
       .subscribe(
         data => {
-          this.loading.dismissLoading();
+          this.loadingService.dismissLoading();
           this.router.navigate(['/login']);
-          this.toast.presentSimpleToast('Account wurde erfolgreich gelöscht!');
+          this.toastService.presentSimpleToast('Account wurde erfolgreich gelöscht!');
         },
         error => {
-          this.loading.dismissLoading();
+          this.loadingService.dismissLoading();
 
           const errorCode = error.status;
 
+          // check error type
           if (errorCode === 406) {
-            this.alert.presentSimpleAlert('Passwort ist inkorrekt!');
+            this.alertService.presentSimpleAlert('Passwort ist inkorrekt!');
           }
           else {
-            this.alert.presentSimpleAlert(error.error.message);
+            this.alertService.presentSimpleAlert(error.error.message);
           }
         }
       );

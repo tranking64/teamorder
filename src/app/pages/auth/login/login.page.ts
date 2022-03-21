@@ -20,22 +20,27 @@ export class LoginPage implements OnInit {
   password;
 
   constructor(
-    private auth: AuthService,
+    private authService: AuthService,
     private router: Router,
-    private loading: LoadingService,
-    private alert: AlertService,
+    private loadingService: LoadingService,
+    private alertService: AlertService,
     private platform: Platform,
-    private settings: SettingsService) { }
+    private settingsService: SettingsService) { }
 
+  // register device on OneSignal
   async oneSignalInit() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
-    this.settings.getCurrUserData(accessToken.value)
+    this.settingsService.getCurrUserData(accessToken.value)
       .subscribe(
         data => {
+          // one signal app id
           OneSignal.setAppId('0c86885f-d9c7-4d92-8cc9-11a1afa6f697');
+
+          // set external user id to tell users apart from each other
           OneSignal.setExternalUserId(data.user_id.toString());
 
+          // set message language depending on country language
           // eslint-disable-next-line max-len
           if (data.country.country_type === 'AUSTRIA' || data.country.country_type === 'GERMANY' || data.country.country_type === 'SWITZERLAND') {
             OneSignal.setLanguage('de');
@@ -60,14 +65,12 @@ export class LoginPage implements OnInit {
     const refreshToken = await Storage.get({ key: 'refresh_token' });
 
     if(refreshToken.value != null) {
-      // eventually solve with loadingScreen (animated)
-      this.loading.presentLoading();
+      this.loadingService.presentLoading();
 
-      this.auth.rememberLogin(refreshToken.value)
+      this.authService.rememberLogin(refreshToken.value)
         .subscribe(
           async (data) => {
-
-            this.loading.dismissLoading();
+            this.loadingService.dismissLoading();
 
             // remove old tokens
             await Storage.remove({ key: 'access_token' });
@@ -77,17 +80,19 @@ export class LoginPage implements OnInit {
             await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
             await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
 
+            // wait for ability to use native functionalities of device/platform
             this.platform.ready().then(() => this.oneSignalInit());
 
             this.router.navigate(['/tabs/tab1']);
           },
           async (error) => {
-            this.loading.dismissLoading();
+            this.loadingService.dismissLoading();
 
             // delete possible old unvalid tokens
             await Storage.remove({ key: 'access_token' });
             await Storage.remove({ key: 'refresh_token' });
 
+            // equal with unsubscribing the device from OneSignal
             this.platform.ready().then(() => OneSignal.removeExternalUserId());
           }
         );
@@ -96,15 +101,16 @@ export class LoginPage implements OnInit {
 
   async login() {
 
+    // check if a valid email was entered via. regex-expression
     if(!this.email.match(
       // eslint-disable-next-line max-len
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     )) {
-      this.alert.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
+      this.alertService.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
     }
 
     else if (this.password === '') {
-      this.alert.presentSimpleAlert('Gebe bitte ein Passwort ein!');
+      this.alertService.presentSimpleAlert('Gebe bitte ein Passwort ein!');
     }
 
     // passed validations
@@ -112,45 +118,45 @@ export class LoginPage implements OnInit {
       await Storage.remove({ key: 'access_token' });
       await Storage.remove({ key: 'refresh_token' });
 
-      this.loading.presentLoading();
+      this.loadingService.presentLoading();
 
-      this.auth.login(this.email, this.password).subscribe(
+      this.authService.login(this.email, this.password).subscribe(
         async data => {
           // store tokens in local database
           await Storage.set({key: 'access_token', value: 'Bearer ' + data.data.tokens.access_token});
           await Storage.set({key: 'refresh_token', value: data.data.tokens.refresh_token});
 
-          this.loading.dismissLoading();
+          this.loadingService.dismissLoading();
 
+          // check/wait if native functionality can be used
           this.platform.ready().then(() => this.oneSignalInit());
 
           this.router.navigate(['/tabs/tab1']);
         },
         error => {
-          this.loading.dismissLoading();
-
-          this.platform.ready().then(() => OneSignal.removeExternalUserId());
+          this.loadingService.dismissLoading();
 
           const errorCode = error.status;
           const errorDetail = error.error.status;
 
+          // check on different error types
           if (errorCode === 401 && errorDetail === 'error') {
-            this.alert.presentSimpleAlert('Dein Konto ist noch nicht verifiziert!');
+            this.alertService.presentSimpleAlert('Dein Konto ist noch nicht verifiziert!');
           }
           else if (errorCode === 401 && errorDetail === 'blocked') {
-            this.alert.presentSimpleAlert('Dein Konto ist zurzeit blockiert!');
+            this.alertService.presentSimpleAlert('Dein Konto ist zurzeit blockiert!');
           }
           else if (errorCode === 404) {
-            this.alert.presentSimpleAlert('Dieses Konto existiert nicht!');
+            this.alertService.presentSimpleAlert('Dieses Konto existiert nicht!');
           }
           else if (errorCode === 406) {
-            this.alert.presentSimpleAlert('Das eingegebene Passwort ist inkorrekt!');
+            this.alertService.presentSimpleAlert('Das eingegebene Passwort ist inkorrekt!');
           }
           else if (errorCode === 429) {
-            this.alert.presentSimpleAlert('Zu viele Anmeldeversuche!');
+            this.alertService.presentSimpleAlert('Zu viele Anmeldeversuche!');
           }
           else {
-            this.alert.presentSimpleAlert(error.error.message);
+            this.alertService.presentSimpleAlert(error.error.message);
           }
       });
     }

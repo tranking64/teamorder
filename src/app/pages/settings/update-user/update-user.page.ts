@@ -28,17 +28,16 @@ export class UpdateUserPage implements OnInit {
   birthDate = format(new Date(), 'yyyy-MM-dd');
   maxDate = new Date().toISOString();
 
-
   constructor(
-    private settings: SettingsService,
-    private loading: LoadingService,
-    private enumData: EnumerationDataService,
-    private alert: AlertService,
-    private toast: ToastService,
+    private settingsService: SettingsService,
+    private loadingService: LoadingService,
+    private enumDataService: EnumerationDataService,
+    private alertService: AlertService,
+    private toastService: ToastService,
     private navCtrl: NavController) { }
 
   ionViewWillEnter() {
-    this.loading.presentLoading();
+    this.loadingService.presentLoading();
     this.getInitialData();
   }
 
@@ -46,6 +45,7 @@ export class UpdateUserPage implements OnInit {
     this.navCtrl.back();
   }
 
+  // transform string
   toTitleCase = (phrase) =>
   phrase
     .toLowerCase()
@@ -53,14 +53,13 @@ export class UpdateUserPage implements OnInit {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
-  // set current user data, for form
   async getInitialData() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
-    this.settings.getCurrUserData(accessToken.value)
+    this.settingsService.getCurrUserData(accessToken.value)
     .subscribe(
       (data) => {
-        this.loading.dismissLoading();
+        this.loadingService.dismissLoading();
 
         // set data
         this.firstName = data.firstname;
@@ -72,17 +71,17 @@ export class UpdateUserPage implements OnInit {
         this.gender = data.gender.gender_type;
       },
       (error) => {
-        this.loading.dismissLoading();
+        this.loadingService.dismissLoading();
 
-        this.alert.presentSimpleAlert(error.error.message);
+        this.alertService.presentSimpleAlert(error.error.message);
       }
     );
 
-    this.enumData.fetchCountries().subscribe(
+    this.enumDataService.fetchCountries().subscribe(
       data => this.countries = data.data
     );
 
-    this.enumData.fetchGenders().subscribe(
+    this.enumDataService.fetchGenders().subscribe(
       (data) => this.genders = data.data
     );
 
@@ -91,39 +90,43 @@ export class UpdateUserPage implements OnInit {
   ngOnInit() {
   }
 
+  // case another date was selected
   dateChanged(value) {
     this.birthDate = value;
+
+    // value used in input field
     this.formattedDate = format(parseISO(value), 'dd MMM yyyy');
   }
 
   async update() {
-
     const accessToken = await Storage.get({ key: 'access_token' });
 
     if (!this.email.match(
       // eslint-disable-next-line max-len
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     )) {
-      this.alert.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
+      this.alertService.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
     }
     else {
-      this.loading.presentLoading();
+      this.loadingService.presentLoading();
 
-      this.settings.updateUser(this.firstName, this.lastName, this.email, this.birthDate, this.country, this.gender, accessToken.value)
+      // eslint-disable-next-line max-len
+      this.settingsService.updateUser(this.firstName, this.lastName, this.email, this.birthDate, this.country, this.gender, accessToken.value)
       .subscribe(
         data => {
-          this.loading.dismissLoading();
+          this.loadingService.dismissLoading();
           this.getBack();
-          this.toast.presentSimpleToast('Kontodaten wurden erfolgreich geändert!');
+          this.toastService.presentSimpleToast('Kontodaten wurden erfolgreich geändert!');
         },
         error => {
-          this.loading.dismissLoading();
+          this.loadingService.dismissLoading();
 
+          // check error type
           if (error.status === 400) {
-            this.alert.presentSimpleAlert('Fülle bitte alle Eingabefelder aus!');
+            this.alertService.presentSimpleAlert('Fülle bitte alle Eingabefelder aus!');
           }
           else {
-            this.alert.presentSimpleAlert(error.error.message);
+            this.alertService.presentSimpleAlert(error.error.message);
           }
         }
       );

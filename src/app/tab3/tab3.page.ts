@@ -43,8 +43,8 @@ export class Tab3Page {
       );
   }
 
+  // deletes the debt of an user
   async presentAlert(item) {
-
     const accessToken = await Storage.get({ key: 'access_token' });
 
     const alert = await this.alertCtrl.create({
@@ -54,9 +54,7 @@ export class Tab3Page {
         {
           text: 'Abbrechen',
           role: 'cancel',
-          id: 'cancel-button',
-          handler: () => {
-          }
+          id: 'cancel-button'
         }, {
           text: 'Bestätigen',
           id: 'confirm-button',

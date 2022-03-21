@@ -22,12 +22,12 @@ export class Tab1Page {
   ) {}
 
   ionViewWillEnter() {
+    // active progress bar in view since data is fetched
     this.loaderActivated = true;
     this.getInitialData();
   }
 
   checkOrderOpen(cDeadline): boolean {
-
     const deadline = this.createDate(cDeadline);
 
     return deadline.getTime() > new Date().getTime();
@@ -53,6 +53,7 @@ export class Tab1Page {
           this.otherRunningOrders = data.data;
 
           if (this.otherRunningOrders.length > 1) {
+            // sort running order by deadline; most nearest are first
             this.otherRunningOrders.sort(
               (curr, next) => {
                 const currDeadline = this.createDate(curr.deadline);
@@ -89,6 +90,7 @@ export class Tab1Page {
   }
 
   orderingData(data) {
+    // pass data
     const navExtras: NavigationExtras = {
       state: data
     };
@@ -97,6 +99,7 @@ export class Tab1Page {
   }
 
   orderWith(initialOrderData) {
+    // pass data
     const navExtras: NavigationExtras = {
       state: initialOrderData
     };
@@ -105,6 +108,7 @@ export class Tab1Page {
   }
 
   createOrder() {
+    // navigate to create order page
     this.router.navigate(['/create-order']);
   }
 
@@ -114,6 +118,7 @@ export class Tab1Page {
     this.orderService.getSpecificOrders(accessToken.value, myInitialOrderData.initial_order_id)
       .subscribe(
         data => {
+          // pass data
           const navExtras: NavigationExtras = {
             state: {
               initialOrderData: myInitialOrderData,

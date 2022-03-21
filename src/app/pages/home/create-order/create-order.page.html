@@ -12,6 +12,7 @@
           <ion-col>
             <div class="ion-text-start input-box">
               <ion-select placeholder="Gruppe" ok-text="Ok" cancel-text="Abbrechen" [(ngModel)]="selectedGroupId">
+                <!-- list all groups where an order can be started -->
                 <div *ngFor="let groups of groupsArr">
                   <div *ngFor="let item of groups">
                     <ion-select-option value="{{ item.group_id }}">{{ item.group_name }}</ion-select-option>

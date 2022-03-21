@@ -27,11 +27,11 @@ export class CreateGroupPage implements OnInit {
   }
 
   getBack() {
-    this.navCtrl.navigateBack(['/tabs/tab1']).then(() => this.router.navigate(['/tabs/tab2']));
+    // this is needed because navigating directly to tab2 doesn't refresh the page
+    this.navCtrl.navigateBack(['/tabs/tab4']).then(() => this.router.navigate(['/tabs/tab2']));
   }
 
   async create() {
-
     if (this.groupName === '') {
       this.alert.presentSimpleAlert('Gebe bitte einen Gruppennamen ein!');
     }
@@ -42,17 +42,17 @@ export class CreateGroupPage implements OnInit {
 
       this.groupService.createGroup(accessToken.value, this.groupName, this.description)
         .subscribe(
-          // bypass load bug
+          // in case of successful creation
           () => {
             this.loading.dismissLoading();
-
-            this.navCtrl.navigateBack(['/tabs/tab1']).then(() => this.router.navigate(['tabs/tab2']));
+            this.getBack();
           },
           error => {
             this.loading.dismissLoading();
 
             const errorCode = error.status;
 
+            // check error
             if (errorCode === 400) {
               this.alert.presentSimpleAlert('Dieser Gruppenname ist schon vergeben!');
             }

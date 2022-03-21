@@ -8,6 +8,7 @@ export class ToastService {
 
   constructor(private toastCtrl: ToastController) { }
 
+  // shows a toast for 2 seconds
   async presentSimpleToast(msg) {
     const toast = await this.toastCtrl.create({
       message: msg,

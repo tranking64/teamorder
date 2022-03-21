@@ -22,7 +22,6 @@ export class SignupPage implements OnInit {
 
   formattedDate = '';
 
-  // signup data
   firstName = '';
   lastName = '';
   email = '';
@@ -34,15 +33,15 @@ export class SignupPage implements OnInit {
   maxDate = new Date().toISOString();
 
   constructor(
-    private alertCtrl: AlertController,
     private router: Router,
-    private auth: AuthService,
-    private enumData: EnumerationDataService,
-    private alert: AlertService,
-    private loading: LoadingService,
-    private toast: ToastService,
+    private authService: AuthService,
+    private enumDataService: EnumerationDataService,
+    private alertHelper: AlertService,
+    private loadingHelper: LoadingService,
+    private toastHelper: ToastService,
     private navCtrl: NavController) { }
 
+  // fetching data for selections
   ngOnInit() {
     this.getCountries();
     this.getGenders();
@@ -52,78 +51,72 @@ export class SignupPage implements OnInit {
     this.navCtrl.back();
   }
 
-  async presentInvalidInputAlert() {
-    const alert = await this.alertCtrl.create({
-      header: 'Ungültige Eingabe!',
-      message: 'Einer deiner Eingaben ist ungültig. Bitte überprüfe diese!',
-      buttons: ['OK']
-    });
-
-    await alert.present();
-  }
-
+  // triggered when the date value is changed in the picker
   dateChanged(value) {
     this.birthDate = value;
     this.formattedDate = format(parseISO(value), 'dd MMM yyyy');
   }
 
   create() {
-    // check if everything is filled
+    // check if every field input is filled
     if (this.firstName === '' || this.lastName === '' || this.email === '' || this.password === '' ||
         this.cPassword === '' || this.gender === '' || this.country === '' || this.formattedDate === '') {
-          this.alert.presentSimpleAlert('Bitte fülle alle Eingabefelder aus!');
+          this.alertHelper.presentSimpleAlert('Bitte fülle alle Eingabefelder aus!');
         }
 
-    // check for valid email
+    // check for valid email by using regex
     else if (!this.email.match(
       // eslint-disable-next-line max-len
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     )) {
-      this.alert.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
+      this.alertHelper.presentSimpleAlert('Gebe bitte eine gültige E-Mail-Adresse ein!');
     }
 
+    // to pass backend password min length error
     else if (this.password.length < 8 && this.cPassword.length < 8) {
-      this.alert.presentSimpleAlert('Passwörter müssen mindestens 8 Zeichen haben!');
+      this.alertHelper.presentSimpleAlert('Passwörter müssen mindestens 8 Zeichen haben!');
     }
 
     // check if passwords match
     else if (this.password !== this.cPassword) {
-      this.alert.presentSimpleAlert('Die eingegebenen Passwörter stimmen nicht überrein!');
+      this.alertHelper.presentSimpleAlert('Die eingegebenen Passwörter stimmen nicht überrein!');
     }
 
     // passed all tests
     else {
-      this.loading.presentLoading();
+      // showing a loading indicator, so that the user knows that the app is working
+      this.loadingHelper.presentLoading();
 
-      this.auth.signup(this.firstName, this.lastName, this.birthDate,
+      this.authService.signup(this.firstName, this.lastName, this.birthDate,
         this.email, this.password, this.country, this.gender)
         .subscribe(
           data => {
-            this.loading.dismissLoading();
+            // remove the loading indicator, since http req. is done
+            this.loadingHelper.dismissLoading();
             this.router.navigate(['/login']);
-            this.toast.presentSimpleToast('Konto wurde erfolgreich erstellt. Du erhaltest in Kürze eine Verifizierungsmail!');
+            this.toastHelper.presentSimpleToast('Konto wurde erfolgreich erstellt. Du erhaltest in Kürze eine Verifizierungsmail!');
           },
+          // catch an http error
           error => {
-            this.loading.dismissLoading();
+            this.loadingHelper.dismissLoading();
 
             if (error.error.status === 'email') {
-              this.alert.presentSimpleAlert('Diese E-Mail-Adresse ist bereits vergeben!');
+              this.alertHelper.presentSimpleAlert('Diese E-Mail-Adresse ist bereits vergeben!');
             }
+            // in case any other unknown error occurs
             else {
-              // check http code and handle error
-              // but actually should never happen except the server is down
-              this.alert.presentSimpleAlert(error.error.message);
+              this.alertHelper.presentSimpleAlert(error.error.message);
             }
           }
         );
     }
   }
 
-  getCountries = () => this.enumData.fetchCountries().subscribe(
+  getCountries = () => this.enumDataService.fetchCountries().subscribe(
     (data) => this.countries = data.data
   );
 
-  getGenders = () => this.enumData.fetchGenders().subscribe(
+  getGenders = () => this.enumDataService.fetchGenders().subscribe(
     (data) => this.genders = data.data
   );
 

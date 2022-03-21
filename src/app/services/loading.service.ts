@@ -10,6 +10,7 @@ export class LoadingService {
 
   constructor(private loadingCtrl: LoadingController) {}
 
+  // shows a loading indicator until it is dismissed
   async presentLoading() {
     this.loading = await this.loadingCtrl.create({
       translucent: true

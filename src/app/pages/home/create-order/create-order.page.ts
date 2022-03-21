@@ -36,10 +36,14 @@ export class CreateOrderPage implements OnInit {
     private navCtrl: NavController
   ) { }
 
+  // set up values for deadline-picker
   ngOnInit() {
     const currentDatetime = new Date();
+
+    // increment by one because of local time
     currentDatetime.setHours(currentDatetime.getHours() + 1);
 
+    // round up to next 15min, e.g.: 19:25 --> 19:30
     this.minRoundedTime  = new Date(Math.ceil(currentDatetime.getTime() / 900000) * 900000).toISOString();
     this.deadline = this.minRoundedTime;
 
@@ -55,6 +59,7 @@ export class CreateOrderPage implements OnInit {
   }
 
   getBack() {
+    // bypass refresh bug
     this.navCtrl.navigateBack(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
   }
 
@@ -77,7 +82,7 @@ export class CreateOrderPage implements OnInit {
   }
 
   dateChanged(value) {
-
+    // validation of selected date; later than current time
     if (new Date(value.substring(0, 19)).getTime() < new Date(this.minRoundedTime.substring(0, 19)).getTime()) {
       this.alertService.presentSimpleAlert('Bitte wähle eine spätere Deadline!');
     }
@@ -106,9 +111,6 @@ export class CreateOrderPage implements OnInit {
             },
             error => {
               this.loadingService.dismissLoading();
-
-              const errorCode = error.status;
-
               this.alertService.presentSimpleAlert(error.error.message);
             }
           );

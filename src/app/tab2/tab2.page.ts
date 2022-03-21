@@ -34,12 +34,13 @@ export class Tab2Page {
   }
 
   getBack() {
-    this.navCtrl.navigateBack('/tabs/tab1').then(() => this.router.navigate(['/tabs/tab2']));
+    this.navCtrl.navigateBack('/tabs/tab4').then(() => this.router.navigate(['/tabs/tab2']));
   }
 
   async getInitialData() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
+    // fetch data from API
     this.groupService.getCreatorGroups(accessToken.value)
       .subscribe(
         data => this.creatorGroups = data.data
@@ -66,6 +67,7 @@ export class Tab2Page {
       .subscribe(() => this.getBack());
   }
 
+  // confirm group invite decline
   async presentDeclineAlert(group) {
     const accessToken = await Storage.get({ key: 'access_token' });
 
@@ -98,7 +100,6 @@ export class Tab2Page {
   }
 
   async detailView(group) {
-
     this.loadingService.presentLoading();
 
     const accessToken = await Storage.get({ key: 'access_token' });
@@ -108,12 +109,12 @@ export class Tab2Page {
   }
 
   getMyUser(accessToken, myUsers, group) {
-
     this.settings.getCurrUserData(accessToken.value)
     .subscribe(
       data => {
         myUsers.forEach(user => {
           if (data.user_id === user.user_id) {
+            // pass needed data to new page
             const navExtras: NavigationExtras = {
               state: {
                 users: myUsers,

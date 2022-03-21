@@ -18,11 +18,11 @@ export class NewPwPage implements OnInit {
   cPassword;
 
   constructor(
-    private auth: AuthService,
+    private authService: AuthService,
     private router: Router,
-    private loading: LoadingService,
-    private alert: AlertService,
-    private toast: ToastService,
+    private loadingService: LoadingService,
+    private alertService: AlertService,
+    private toastService: ToastService,
     private navCtrl: NavController) { }
 
   ngOnInit() {
@@ -34,37 +34,38 @@ export class NewPwPage implements OnInit {
 
   resetPassword() {
     if(this.password !== this.cPassword) {
-      this.alert.presentSimpleAlert('Neue Passwörter stimmen nicht überrein!');
+      this.alertService.presentSimpleAlert('Neue Passwörter stimmen nicht überrein!');
     }
     else if (this.password.length < 8 && this.cPassword.length < 8) {
-      this.alert.presentSimpleAlert('Passwörter müssen mindestens 8 Zeichen haben!');
+      this.alertService.presentSimpleAlert('Passwörter müssen mindestens 8 Zeichen haben!');
     }
     else {
-      this.loading.presentLoading();
+      this.loadingService.presentLoading();
 
-      this.auth.resetPassword(this.code, this.password)
+      this.authService.resetPassword(this.code, this.password)
         .subscribe(
           data => {
-            this.loading.dismissLoading();
+            this.loadingService.dismissLoading();
             this.router.navigate(['/login']);
-            this.toast.presentSimpleToast('Passwort wurde erfolgreich geändert!');
+            this.toastService.presentSimpleToast('Passwort wurde erfolgreich geändert!');
           },
           error => {
-            this.loading.dismissLoading();
+            this.loadingService.dismissLoading();
 
             const errorCode = error.status;
 
+            // check on different error types
             if (errorCode === 400) {
-              this.alert.presentSimpleAlert('Unültige Eingaben!');
+              this.alertService.presentSimpleAlert('Unültige Eingaben!');
             }
             else if (errorCode === 401) {
-              this.alert.presentSimpleAlert('Der Code ist abgelaufen. Bitte fordere einen neuen Code an!');
+              this.alertService.presentSimpleAlert('Der Code ist abgelaufen. Bitte fordere einen neuen Code an!');
             }
             else if (errorCode === 404 && error.error.status) {
-              this.alert.presentSimpleAlert('Du hast einen invaliden Code eingegeben!');
+              this.alertService.presentSimpleAlert('Du hast einen invaliden Code eingegeben!');
             }
             else {
-              this.alert.presentSimpleAlert(error.error.message);
+              this.alertService.presentSimpleAlert(error.error.message);
             }
           }
         );

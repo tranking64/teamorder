@@ -21,12 +21,10 @@ export class DetailGroupPagePage implements OnInit {
     private groupService: GroupService,
     private navCtrl: NavController,
     private alertCtrl: AlertController,
-    private actionSheetCtrl: ActionSheetController
-    ) {
-
-  }
+    private actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit() {
+    // get passed data
     const routerState = this.router.getCurrentNavigation().extras.state;
     this.currentGroup = routerState.currentGroup;
     this.users = routerState.users;
@@ -34,10 +32,12 @@ export class DetailGroupPagePage implements OnInit {
   }
 
   getBack() {
+    // bypass loading bug
     this.navCtrl.navigateBack(['/tabs/tab4']).then(() => this.router.navigate(['/tabs/tab2']));
   }
 
   editGroup() {
+    // pass current group data to new page
     const navExtras: NavigationExtras = {
       state: this.currentGroup
     };
@@ -45,6 +45,7 @@ export class DetailGroupPagePage implements OnInit {
     this.router.navigate(['edit-group'], navExtras);
   }
 
+  // alert if group really wants to be deleted
   async presentDeleteAlert() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
@@ -55,7 +56,6 @@ export class DetailGroupPagePage implements OnInit {
         {
           text: 'Nein',
           role: 'cancel',
-          //cssClass: 'secondary',
           id: 'cancel-button',
           handler: () => {
           }
@@ -65,7 +65,6 @@ export class DetailGroupPagePage implements OnInit {
           handler: () => {
             this.groupService.deleteGroup(accessToken.value, this.currentGroup.group_id)
               .subscribe(
-                // bypass load bug
                 () => this.getBack()
               );
           }
@@ -76,6 +75,7 @@ export class DetailGroupPagePage implements OnInit {
     await alert.present();
   }
 
+  // alert if group really want to be left
   async presentLeaveAlert() {
     const accessToken = await Storage.get({ key: 'access_token' });
 
@@ -95,7 +95,6 @@ export class DetailGroupPagePage implements OnInit {
           handler: () => {
             this.groupService.leaveGroup(accessToken.value, this.currentGroup.group_id)
               .subscribe(
-                // bypass load bug
                 () => this.getBack()
               );
           }
@@ -106,10 +105,9 @@ export class DetailGroupPagePage implements OnInit {
     await alert.present();
   }
 
-  async presentActionSheet(user) {
+  // popup to remove user and switch their roles depending on their current role
+  async presentAdminActionSheet(user) {
     const accessToken = await Storage.get({ key: 'access_token' });
-
-    console.log(user);
 
     const actionSheet = await this.actionSheetCtrl.create({
       buttons: [
@@ -136,11 +134,13 @@ export class DetailGroupPagePage implements OnInit {
     const { role } = await actionSheet.onDidDismiss();
   }
 
-  async presentAdminActionSheet(user) {
+  // popup to remove user
+  async presentCreatorActionSheet(user) {
     const accessToken = await Storage.get({ key: 'access_token' });
 
     let actionSheet;
 
+    // check current role
     if(user.role_type_en === 'MEMBER') {
       actionSheet = await this.actionSheetCtrl.create({
         buttons: [
@@ -155,6 +155,7 @@ export class DetailGroupPagePage implements OnInit {
                   );
             }
           },
+          // member --> admin
           {
             text: 'Zum Admin machen',
             handler: () => {
@@ -191,6 +192,7 @@ export class DetailGroupPagePage implements OnInit {
                   );
             }
           },
+          // admin --> member
           {
             text: 'Zum Mitglied machen',
             handler: () => {
@@ -221,6 +223,7 @@ export class DetailGroupPagePage implements OnInit {
   }
 
   invite() {
+    // pass data
     const navExtras: NavigationExtras = {
       state: this.currentGroup
     };
@@ -228,6 +231,7 @@ export class DetailGroupPagePage implements OnInit {
     this.router.navigate(['invite-person'], navExtras);
   }
 
+  // e.g.: HELLO WORLD --> Hello World
   toTitleCase = (phrase) =>
     phrase
       .toLowerCase()

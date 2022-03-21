@@ -22,6 +22,7 @@
                     </ion-col>
                     <ion-col class="ion-text-end">
                       <ion-text color="danger">
+                        <!-- e.g.: 13.99 -->
                         <h2>{{ item.outstanding_amount.toFixed(2) }}€</h2>
                       </ion-text>
                     </ion-col>
@@ -57,6 +58,7 @@
       <div *ngFor="let item of debtors">
         <ion-row>
           <ion-col>
+            <!-- clickable card to confirm payment -->
             <ion-card (click)="presentAlert(item)" class="ion-activatable ripple-parent ion-no-margin">
               <ion-card-content>
                 <ion-row>

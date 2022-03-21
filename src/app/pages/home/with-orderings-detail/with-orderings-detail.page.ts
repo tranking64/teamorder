@@ -22,13 +22,15 @@ export class WithOrderingsDetailPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    // get passed data
     const routerState = this.router.getCurrentNavigation().extras.state;
     this.currData = routerState;
     this.orders = this.currData.orders;
   }
 
   getBack() {
-    this.navCtrl.navigateBack(['/tabs/tab2']).then(() => this.router.navigate(['/tabs/tab1']));
+    // bypass loading bug
+    this.navCtrl.navigateBack(['/tabs/tab4']).then(() => this.router.navigate(['/tabs/tab1']));
   }
 
   async presentDeleteAlert(item) {
@@ -51,6 +53,7 @@ export class WithOrderingsDetailPage implements OnInit {
             this.orderService.removeWithOrder(accessToken.value, item.order_id)
               .subscribe(
                 () => {
+                  // close page if all with-orders were removed
                   if(this.orders.length-1 === 0) {
                     this.getBack();
                   }
